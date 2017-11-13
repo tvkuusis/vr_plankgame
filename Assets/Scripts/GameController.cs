@@ -236,7 +236,6 @@ public class GameController : MonoBehaviour {
 		leftFootCalibOffset.transform.rotation = leftFootCalibModel.transform.rotation;
         //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
 
-
         rightFootCalibOffset.transform.position = rightFootCalibModel.transform.position;
 		rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, 0, rightFoot.transform.position.z);
 		rightFootCalibOffset.transform.rotation = rightFootCalibModel.transform.rotation;
