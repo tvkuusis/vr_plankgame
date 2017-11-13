@@ -314,6 +314,7 @@ public class GameController : MonoBehaviour {
         else {
             print("No saved position found for right foot.");
         }
+
         if (i == 1) {
             GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
             GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
