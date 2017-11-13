@@ -19,14 +19,14 @@ public class GameController : MonoBehaviour {
 	float yDist = 0;
 	Vector3 newPosition;
 
-    public GameObject leftFoot;
-    public GameObject rightFoot;
+    public GameObject leftFootModel;
+    public GameObject rightFootModel;
     //public GameObject leftFootModel;
     //public GameObject rightFootModel;
-    public GameObject leftFootCalibModel;
-    public GameObject rightFootCalibModel;
 	public GameObject leftFootCalibOffset;
 	public GameObject rightFootCalibOffset;
+    public GameObject leftCalibModel;
+    public GameObject rightCalibModel;
     public GameObject playerBlinder;
 	public GameObject fallSwitch;
 	public GameObject fallColliders;
@@ -56,6 +56,7 @@ public class GameController : MonoBehaviour {
 	public bool leftFootInPosition;
 	[HideInInspector]
 	public bool rightFootInposition;
+    bool feetSwitched;
 
 	AudioSource[] audios;
 	AudioSource ambientSound;
@@ -185,8 +186,8 @@ public class GameController : MonoBehaviour {
 	}
 
     public void FallCheck(){
-        bool left = leftFoot.GetComponentInChildren<FootScript>().grounded;
-        bool right = rightFoot.GetComponentInChildren<FootScript>().grounded;
+        bool left = leftFootModel.GetComponentInChildren<PlayerFallScript>().grounded;
+        bool right = rightFootModel.GetComponentInChildren<PlayerFallScript>().grounded;
 
 		if(!left && !right && !falling) {
             PlayerFall();
@@ -227,18 +228,18 @@ public class GameController : MonoBehaviour {
 
     public void CalibrateFeetPositions(){
 		pressSound.Play ();
-		leftFoot.SetActive (true);
-		rightFoot.SetActive (true);
+		leftFootModel.SetActive (true);
+		rightFootModel.SetActive (true);
 
         /////////////////////////
-        leftFootCalibOffset.transform.position = leftFootCalibModel.transform.position;
-		leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, 0, leftFoot.transform.position.z);
-		leftFootCalibOffset.transform.rotation = leftFootCalibModel.transform.rotation;
+        leftFootCalibOffset.transform.position = leftCalibModel.transform.position;
+		leftFootModel.transform.position = new Vector3(leftFootModel.transform.position.x, 0, leftFootModel.transform.position.z);
+		leftFootCalibOffset.transform.rotation = leftCalibModel.transform.rotation;
         //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
 
-        rightFootCalibOffset.transform.position = rightFootCalibModel.transform.position;
-		rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, 0, rightFoot.transform.position.z);
-		rightFootCalibOffset.transform.rotation = rightFootCalibModel.transform.rotation;
+        rightFootCalibOffset.transform.position = rightCalibModel.transform.position;
+		rightFootModel.transform.position = new Vector3(rightFootModel.transform.position.x, 0, rightFootModel.transform.position.z);
+		rightFootCalibOffset.transform.rotation = rightCalibModel.transform.rotation;
 
         print("Feet calibrated");
         SaveFeetPositions();
@@ -270,6 +271,8 @@ public class GameController : MonoBehaviour {
     }
 
 	void LoadFeetPositions(){
+        var i = PlayerPrefs.GetInt("FeetSwitched");
+
         // Temp variables
         float x = 0; float y = 0; float z = 0;
         float j = 0; float k = 0; float l = 0;
@@ -311,52 +314,10 @@ public class GameController : MonoBehaviour {
         else {
             print("No saved position found for right foot.");
         }
-    }
 
-    void LoadFeetRotations()
-    {
-        // Temp variables
-        float x = 0; float y = 0; float z = 0;
-        float j = 0; float k = 0; float l = 0;
-
-        if (PlayerPrefs.HasKey("LeftFootXPos") && PlayerPrefs.HasKey("LeftFootYPos") && PlayerPrefs.HasKey("LeftFootZPos") && PlayerPrefs.HasKey("LeftFootXRot") && PlayerPrefs.HasKey("LeftFootYRot") && PlayerPrefs.HasKey("LeftFootZRot")) {
-            x = PlayerPrefs.GetFloat("LeftFootXPos");
-            y = PlayerPrefs.GetFloat("LeftFootYPos");
-            z = PlayerPrefs.GetFloat("LeftFootZPos");
-            j = PlayerPrefs.GetFloat("LeftFootXRot");
-            k = PlayerPrefs.GetFloat("LeftFootYRot");
-            l = PlayerPrefs.GetFloat("LeftFootZRot");
-
-            leftFootCalibOffset.transform.position = new Vector3(x, y, z);
-            leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
-            leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
-            leftFootCalibOffset.transform.rotation = Quaternion.Euler(leftFootCalibOffset.transform.rotation.x, k, leftFootCalibOffset.transform.rotation.z);
-            leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
-            print("Left foot position loaded from memory.");
-        }
-        else {
-            print("No saved position found for left foot.");
-        }
-        x = 0; y = 0; z = 0;
-        j = 0; k = 0; l = 0;
-
-        if (PlayerPrefs.HasKey("RightFootXPos") && PlayerPrefs.HasKey("RightFootYPos") && PlayerPrefs.HasKey("RightFootZPos") && PlayerPrefs.HasKey("RightFootXRot") && PlayerPrefs.HasKey("RightFootYRot") && PlayerPrefs.HasKey("RightFootZRot")) {
-            x = PlayerPrefs.GetFloat("RightFootXPos");
-            y = PlayerPrefs.GetFloat("RightFootYPos");
-            z = PlayerPrefs.GetFloat("RightFootZPos");
-            j = PlayerPrefs.GetFloat("RightFootXRot");
-            k = PlayerPrefs.GetFloat("RightFootYRot");
-            l = PlayerPrefs.GetFloat("RightFootZRot");
-
-            rightFootCalibOffset.transform.position = new Vector3(x, y, z);
-            rightFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
-            rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, rightFootCalibModel.transform.position.y, rightFoot.transform.position.z);
-            rightFootCalibOffset.transform.rotation = Quaternion.Euler(rightFootCalibOffset.transform.rotation.x, k, rightFootCalibOffset.transform.rotation.z);
-            rightFootCalibOffset.transform.forward = rightFootCalibModel.transform.forward;
-            print("Right foot position loaded from memory.");
-        }
-        else {
-            print("No saved position found for right foot.");
+        if (i == 1) {
+            GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
+            GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
         }
     }
 
@@ -416,4 +377,17 @@ public class GameController : MonoBehaviour {
             print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
         }
     }
+
+    //public void SwitchFeet()
+    //{
+    //    feetSwitched = feetSwitched ? false : true;
+    //    if (feetSwitched) {
+    //        PlayerPrefs.SetInt("FeetSwitched", 1);
+    //        print("Feet inverted");
+    //    }
+    //    else {
+    //        PlayerPrefs.SetInt("FeetSwitched", 0);
+    //        print("Feet normal");
+    //    }
+    //}
 }
