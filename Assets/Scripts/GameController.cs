@@ -272,7 +272,6 @@ public class GameController : MonoBehaviour {
 
 	void LoadFeetPositions(){
         var i = PlayerPrefs.GetInt("FeetSwitched");
-
         // Temp variables
         float x = 0; float y = 0; float z = 0;
         float j = 0; float k = 0; float l = 0;
@@ -314,6 +313,7 @@ public class GameController : MonoBehaviour {
         else {
             print("No saved position found for right foot.");
         }
+         
         if (i == 1) {
             GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
             GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();

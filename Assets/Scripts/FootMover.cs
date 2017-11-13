@@ -30,7 +30,6 @@ public class FootMover : MonoBehaviour {
     public void SwitchFoot(){
         leftFoot = leftFoot ? false : true;
         followThis = leftFoot ? leftFootTracker.transform : rightFootTracker.transform;
-       // PlayerPrefs.SetBool("LeftFootXPos", leftFootCalibOffset.transform.localPosition.x);
 
         if(originalLeftFoot && leftFoot) {
             PlayerPrefs.SetInt("FeetSwitched", 0);
