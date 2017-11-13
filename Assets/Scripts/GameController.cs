@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 	public GameObject player;
     public GameObject elevator;
 	public GameObject[] gameScenePlanks;
-	public GameObject gameRoom;
+	public GameObject tower;
     ElevatorScript es;
 	public float fallAcceleration = 9.81f;
 	float velocity = 0;
@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour {
     public GameObject torchPrefab;
 
     [HideInInspector]
-	public string[] correctSpinnerCharacters;
+	public string[] correctSpinnerSymbols;
     public bool[] spinnerStates;
 	bool elevatorActivated;
 
@@ -64,27 +64,38 @@ public class GameController : MonoBehaviour {
 	AudioSource pressSound;
 	AudioSource spinnerSound;
 
+    private static GameController gameControllerInstance;
 
-	// Use this for initialization
-	void Start () {
-        correctSpinnerCharacters = new string[3];
-        spinnerStates = new bool[3];
-        for(int i = 0; i < correctSpinnerCharacters.Length; i++) {
-            correctSpinnerCharacters[i] = ReturnRandomAlphabet();
-            print("Spinner " + i + " correct: " + correctSpinnerCharacters[i]);
-        }
+    //void Awake(){
+    //    DontDestroyOnLoad(this);
+
+    //    if(gameControllerInstance == null) {
+    //        gameControllerInstance = this;
+    //    }
+    //    else {
+    //        DestroyObject(gameObject);
+    //    }
+    //}
+
+    void Start () {
+        //spawnroom = GameObject.Find("Spawnroom");
+        //tower = GameObject.Find("Tower");
+        //player = GameObject.Find("NVRPlayerModified");
+        //leftFoot = GameObject.Find("Foot Left Model");
+        //rightFoot = GameObject.Find("Foot Right Model");
+
+
         //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerCharacters[0], correctSpinnerCharacters[1], correctSpinnerCharacters[2]);
 
-        if (!playerInSpawnRoom) {
-			InstantiateTorch ();
-		}
+        SetSpinnerSymbols();
         es = elevator.GetComponent<ElevatorScript>();
         blinder = playerBlinder.GetComponent<Renderer>();
         blinderOrigColor = blinder.material.color;
-		if (playerInSpawnRoom) {
-			newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
-			player.transform.position = newPosition;
-		}
+
+		//if (playerInSpawnRoom) {
+		//	newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
+		//	player.transform.position = newPosition;
+		//}
 
 		audios = GetComponents<AudioSource> ();
 		ambientSound = audios [0];
@@ -101,13 +112,13 @@ public class GameController : MonoBehaviour {
 			t -= Time.deltaTime;
 		} else if (t <= 0 && !feetLoaded) {
 			
-			//LoadFeetPositions();
+			LoadFeetPositions();
 			feetLoaded = true;
 		}
 
 		if (playerInSpawnRoom) {
-			newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
-			player.transform.position = newPosition;
+			//newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
+			//player.transform.position = newPosition;
             if (Input.GetKeyDown(KeyCode.M)) {
                 CalibrateFeetPositions();
             }else if (Input.GetKeyDown(KeyCode.L)) {
@@ -183,14 +194,14 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void InstantiateTorch()
-    {
-        var torch = Instantiate(torchPrefab, torchSpawn);
-		torch.transform.SetParent (GameObject.Find("Tower").transform);
-    }
+  //  public void InstantiateTorch()
+  //  {
+  //      var torch = Instantiate(torchPrefab, torchSpawn);
+		//torch.transform.SetParent (GameObject.Find("Tower").transform);
+  //  }
 
     public void SetSpinnerLetter(string letter, int spinner){
-        if(letter == correctSpinnerCharacters[spinner]) {
+        if(letter == correctSpinnerSymbols[spinner]) {
             spinnerStates[spinner] = true;
         }
         else {
@@ -218,34 +229,43 @@ public class GameController : MonoBehaviour {
 		pressSound.Play ();
 		leftFoot.SetActive (true);
 		rightFoot.SetActive (true);
-		leftFootCalibOffset.transform.position = leftFootCalibModel.transform.position;
+
+        /////////////////////////
+        leftFootCalibOffset.transform.position = leftFootCalibModel.transform.position;
 		leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, 0, leftFoot.transform.position.z);
 		leftFootCalibOffset.transform.rotation = leftFootCalibModel.transform.rotation;
+        //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
+
+
         rightFootCalibOffset.transform.position = rightFootCalibModel.transform.position;
 		rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, 0, rightFoot.transform.position.z);
 		rightFootCalibOffset.transform.rotation = rightFootCalibModel.transform.rotation;
 
         print("Feet calibrated");
         SaveFeetPositions();
-        LoadFeetPositions();
+        //LoadFeetPositions();
     }
 
     void SaveFeetPositions(){
-		PlayerPrefs.SetFloat("LeftFootXPos", leftFootCalibOffset.transform.position.x);
-		PlayerPrefs.SetFloat("LeftFootYPos", leftFootCalibOffset.transform.position.y);
-		PlayerPrefs.SetFloat("LeftFootZPos", leftFootCalibOffset.transform.position.z);
 
-		PlayerPrefs.SetFloat("RightFootXPos", rightFootCalibOffset.transform.position.x);
-		PlayerPrefs.SetFloat("RightFootYPos", rightFootCalibOffset.transform.position.y);
-		PlayerPrefs.SetFloat("RightFootZPos", rightFootCalibOffset.transform.position.z);
+        PlayerPrefs.SetFloat("LeftFootXPos", leftFootCalibOffset.transform.localPosition.x);
+		PlayerPrefs.SetFloat("LeftFootYPos", leftFootCalibOffset.transform.localPosition.y);
+		PlayerPrefs.SetFloat("LeftFootZPos", leftFootCalibOffset.transform.localPosition.z);
 
-		PlayerPrefs.SetFloat("LeftFootXRot", leftFootCalibOffset.transform.localRotation.x);
-		PlayerPrefs.SetFloat("LeftFootYRot", leftFootCalibOffset.transform.localRotation.y);
-		PlayerPrefs.SetFloat("LeftFootZRot", leftFootCalibOffset.transform.localRotation.z);
+		PlayerPrefs.SetFloat("RightFootXPos", rightFootCalibOffset.transform.localPosition.x);
+		PlayerPrefs.SetFloat("RightFootYPos", rightFootCalibOffset.transform.localPosition.y);
+		PlayerPrefs.SetFloat("RightFootZPos", rightFootCalibOffset.transform.localPosition.z);
 
-		PlayerPrefs.SetFloat("RightFootXRot", rightFootCalibOffset.transform.localRotation.x);
-		PlayerPrefs.SetFloat("RightFootYRot", rightFootCalibOffset.transform.localRotation.y);
-		PlayerPrefs.SetFloat("RightFootZRot", rightFootCalibOffset.transform.localRotation.z);
+        ////////////////
+		PlayerPrefs.SetFloat("LeftFootXRot", leftFootCalibOffset.transform.localEulerAngles.x);
+		PlayerPrefs.SetFloat("LeftFootYRot", leftFootCalibOffset.transform.localEulerAngles.y);
+		PlayerPrefs.SetFloat("LeftFootZRot", leftFootCalibOffset.transform.localEulerAngles.z);
+        //print(leftFootCalibOffset.transform.localEulerAngles.x + " " + leftFootCalibOffset.transform.localEulerAngles.y + " " + leftFootCalibOffset.transform.localEulerAngles.z);
+        ///////////////
+
+		PlayerPrefs.SetFloat("RightFootXRot", rightFootCalibOffset.transform.localEulerAngles.x);
+		PlayerPrefs.SetFloat("RightFootYRot", rightFootCalibOffset.transform.localEulerAngles.y);
+		PlayerPrefs.SetFloat("RightFootZRot", rightFootCalibOffset.transform.localEulerAngles.z);
 
         print("Feet positions saved!");
     }
@@ -263,11 +283,10 @@ public class GameController : MonoBehaviour {
             k = PlayerPrefs.GetFloat("LeftFootYRot");
             l = PlayerPrefs.GetFloat("LeftFootZRot");
 
-			leftFootCalibOffset.transform.position = new Vector3(x, y, z);
-			leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
-			leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
-			leftFootCalibOffset.transform.rotation = Quaternion.Euler(leftFootCalibOffset.transform.rotation.x, k, leftFootCalibOffset.transform.rotation.z);
-			leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
+            leftFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
+			//leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
+			//leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
+			leftFootCalibOffset.transform.localEulerAngles = new Vector3(j, k, l);
             print("Left foot position loaded from memory.");
         }
         else {
@@ -284,11 +303,57 @@ public class GameController : MonoBehaviour {
             k = PlayerPrefs.GetFloat("RightFootYRot");
             l = PlayerPrefs.GetFloat("RightFootZRot");
 
-			rightFootCalibOffset.transform.position = new Vector3(x, y, z);
-			rightFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
-			rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, rightFootCalibModel.transform.position.y, rightFoot.transform.position.z);
-			rightFootCalibOffset.transform.rotation = Quaternion.Euler(rightFootCalibOffset.transform.rotation.x, k, rightFootCalibOffset.transform.rotation.z);
-			rightFootCalibOffset.transform.forward = rightFootCalibModel.transform.forward;
+            rightFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
+            //leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
+            //leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
+            rightFootCalibOffset.transform.localEulerAngles = new Vector3(j, k, l);
+            print("Right foot position loaded from memory.");
+        }
+        else {
+            print("No saved position found for right foot.");
+        }
+    }
+
+    void LoadFeetRotations()
+    {
+        // Temp variables
+        float x = 0; float y = 0; float z = 0;
+        float j = 0; float k = 0; float l = 0;
+
+        if (PlayerPrefs.HasKey("LeftFootXPos") && PlayerPrefs.HasKey("LeftFootYPos") && PlayerPrefs.HasKey("LeftFootZPos") && PlayerPrefs.HasKey("LeftFootXRot") && PlayerPrefs.HasKey("LeftFootYRot") && PlayerPrefs.HasKey("LeftFootZRot")) {
+            x = PlayerPrefs.GetFloat("LeftFootXPos");
+            y = PlayerPrefs.GetFloat("LeftFootYPos");
+            z = PlayerPrefs.GetFloat("LeftFootZPos");
+            j = PlayerPrefs.GetFloat("LeftFootXRot");
+            k = PlayerPrefs.GetFloat("LeftFootYRot");
+            l = PlayerPrefs.GetFloat("LeftFootZRot");
+
+            leftFootCalibOffset.transform.position = new Vector3(x, y, z);
+            leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
+            leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
+            leftFootCalibOffset.transform.rotation = Quaternion.Euler(leftFootCalibOffset.transform.rotation.x, k, leftFootCalibOffset.transform.rotation.z);
+            leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
+            print("Left foot position loaded from memory.");
+        }
+        else {
+            print("No saved position found for left foot.");
+        }
+        x = 0; y = 0; z = 0;
+        j = 0; k = 0; l = 0;
+
+        if (PlayerPrefs.HasKey("RightFootXPos") && PlayerPrefs.HasKey("RightFootYPos") && PlayerPrefs.HasKey("RightFootZPos") && PlayerPrefs.HasKey("RightFootXRot") && PlayerPrefs.HasKey("RightFootYRot") && PlayerPrefs.HasKey("RightFootZRot")) {
+            x = PlayerPrefs.GetFloat("RightFootXPos");
+            y = PlayerPrefs.GetFloat("RightFootYPos");
+            z = PlayerPrefs.GetFloat("RightFootZPos");
+            j = PlayerPrefs.GetFloat("RightFootXRot");
+            k = PlayerPrefs.GetFloat("RightFootYRot");
+            l = PlayerPrefs.GetFloat("RightFootZRot");
+
+            rightFootCalibOffset.transform.position = new Vector3(x, y, z);
+            rightFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
+            rightFoot.transform.position = new Vector3(rightFoot.transform.position.x, rightFootCalibModel.transform.position.y, rightFoot.transform.position.z);
+            rightFootCalibOffset.transform.rotation = Quaternion.Euler(rightFootCalibOffset.transform.rotation.x, k, rightFootCalibOffset.transform.rotation.z);
+            rightFootCalibOffset.transform.forward = rightFootCalibModel.transform.forward;
             print("Right foot position loaded from memory.");
         }
         else {
@@ -298,26 +363,26 @@ public class GameController : MonoBehaviour {
 
 	public void StartGame(){ // take room number as a variable if there's more than one room
 		if (playerInSpawnRoom) {
-			if (leftFootInPosition && rightFootInposition) {
+			//if (leftFootInPosition && rightFootInposition) {
 				pressSound.Play ();
 				print ("Game started");
 				spawnroom.SetActive (false);
 				playerInSpawnRoom = false;
-				gameRoom.SetActive (true);
+				tower.SetActive (true);
 				ambientSound.Play ();
 				if (fallEnabled) {
 					fallColliders.SetActive (true);
 				} else {
 					fallColliders.SetActive (false);
 				}
-                GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerCharacters[0], correctSpinnerCharacters[1], correctSpinnerCharacters[2]);
-				InstantiateTorch ();
+                GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
+				//InstantiateTorch ();
 				foreach (GameObject plank in gameScenePlanks) {
 					plank.GetComponent<PositionCalibration> ().LoadPosition ();
 				}
-			} else {
-				print ("Feet not in correct position");
-			}
+			//} else {
+			//	print ("Feet not in correct position");
+			//}
 		} else if (!playerInSpawnRoom) {
 			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
 			//print ("Back to spawn room");
@@ -343,4 +408,13 @@ public class GameController : MonoBehaviour {
 		thumpSound.Play ();
 		StartFading ();
 	}
+
+    void SetSpinnerSymbols(){
+        correctSpinnerSymbols = new string[3];
+        spinnerStates = new bool[3];
+        for (int i = 0; i < correctSpinnerSymbols.Length; i++) {
+            correctSpinnerSymbols[i] = ReturnRandomAlphabet();
+            print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
+        }
+    }
 }

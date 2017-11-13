@@ -16,7 +16,7 @@ public class FootScript : MonoBehaviour {
     void OnTriggerStay(Collider col){
         if (col.CompareTag("Ground") && !grounded) {
             grounded = true;
-            print(gameObject.transform.parent.name +  " grounded.");
+            //print(gameObject.transform.parent.name +  " grounded.");
 			rend.material.color = origC;
 			//rend.material.color = new Color (0, 1, 0, 1);
         }
@@ -25,7 +25,7 @@ public class FootScript : MonoBehaviour {
     void OnTriggerExit(Collider col){
         if (col.CompareTag("Ground") && grounded) {
             grounded = false;
-            print(gameObject.transform.parent.name + " not grounded.");
+            //print(gameObject.transform.parent.name + " not grounded.");
 			//rend.material.color = new Color (1, 0, 0, 1);
 			rend.material.color = new Color (origC.r, origC.g, origC.b, 0.6f);
         }
