@@ -75,7 +75,9 @@ namespace NewtonVR
         private GameObject RenderModel;
 
 		void Start(){
-			pc = GameObject.Find("Plank").GetComponent<PositionCalibration>();
+            if (GameObject.Find("Plank")){
+                pc = GameObject.Find("Plank").GetComponent<PositionCalibration>();
+            }
 		}
 
         public bool IsHovering
@@ -314,7 +316,7 @@ namespace NewtonVR
                 {
                     if (CurrentlyInteracting == null)
                     {
-						if(pc != null && pc.calibrating){
+						if(pc && pc.calibrating){
 							pc.CalibratePosition (calibrationPoint);
 						} else {
 							PickupClosest ();
