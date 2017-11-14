@@ -82,7 +82,7 @@ public class PositionCalibration : MonoBehaviour {
 		transform.localPosition = midPoint;
 
 		// Rotate object toward the startposition and fix the angle by 90 degrees
-		transform.LookAt(new Vector3(newStart.x, zeroY, newStart.z));
+		transform.LookAt(new Vector3(newStart.x, transform.position.y, newStart.z));
 		//transform.right = transform.forward;
 		//transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0);
 		pointsCalibrated = 0;
