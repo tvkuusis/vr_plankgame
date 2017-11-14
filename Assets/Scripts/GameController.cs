@@ -58,6 +58,10 @@ public class GameController : MonoBehaviour {
 	public bool rightFootInposition;
     bool feetSwitched;
 
+    // Floor calibration
+    public Transform calibrationPoint1;
+    public Transform calibrationPoint2;
+
 	AudioSource[] audios;
 	AudioSource ambientSound;
 	AudioSource windSound;
@@ -79,15 +83,6 @@ public class GameController : MonoBehaviour {
     //}
 
     void Start () {
-        //spawnroom = GameObject.Find("Spawnroom");
-        //tower = GameObject.Find("Tower");
-        //player = GameObject.Find("NVRPlayerModified");
-        //leftFoot = GameObject.Find("Foot Left Model");
-        //rightFoot = GameObject.Find("Foot Right Model");
-
-
-        //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerCharacters[0], correctSpinnerCharacters[1], correctSpinnerCharacters[2]);
-
         SetSpinnerSymbols();
         es = elevator.GetComponent<ElevatorScript>();
         blinder = playerBlinder.GetComponent<Renderer>();
@@ -114,6 +109,7 @@ public class GameController : MonoBehaviour {
 		} else if (t <= 0 && !feetLoaded) {
 			
 			LoadFeetPositions();
+            AlignRoomWithPlayer();
 			feetLoaded = true;
 		}
 
@@ -150,6 +146,9 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q)) {
 			QuitGame ();    
 		}
+        if (Input.GetKeyDown(KeyCode.A)) {
+            CalibrateRoomOffset();
+        }
 
         if (fadeout) {
             blinderAlpha += Time.deltaTime * fadeSpeed;
@@ -195,12 +194,6 @@ public class GameController : MonoBehaviour {
         }
     }
 
-  //  public void InstantiateTorch()
-  //  {
-  //      var torch = Instantiate(torchPrefab, torchSpawn);
-		//torch.transform.SetParent (GameObject.Find("Tower").transform);
-  //  }
-
     public void SetSpinnerLetter(string letter, int spinner){
         if(letter == correctSpinnerSymbols[spinner]) {
             spinnerStates[spinner] = true;
@@ -233,12 +226,12 @@ public class GameController : MonoBehaviour {
 
         /////////////////////////
         leftFootCalibOffset.transform.position = leftCalibModel.transform.position;
-		leftFootModel.transform.position = new Vector3(leftFootModel.transform.position.x, 0, leftFootModel.transform.position.z);
+		leftFootModel.transform.position = new Vector3(leftFootModel.transform.position.x, leftFootModel.transform.position.y, leftFootModel.transform.position.z);
 		leftFootCalibOffset.transform.rotation = leftCalibModel.transform.rotation;
         //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
 
         rightFootCalibOffset.transform.position = rightCalibModel.transform.position;
-		rightFootModel.transform.position = new Vector3(rightFootModel.transform.position.x, 0, rightFootModel.transform.position.z);
+		rightFootModel.transform.position = new Vector3(rightFootModel.transform.position.x, rightCalibModel.transform.position.y, rightFootModel.transform.position.z);
 		rightFootCalibOffset.transform.rotation = rightCalibModel.transform.rotation;
 
         print("Feet calibrated");
@@ -284,10 +277,13 @@ public class GameController : MonoBehaviour {
             k = PlayerPrefs.GetFloat("LeftFootYRot");
             l = PlayerPrefs.GetFloat("LeftFootZRot");
 
+            // leftFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
             leftFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
-			//leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
-			//leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
-			leftFootCalibOffset.transform.localEulerAngles = new Vector3(j, k, l);
+
+
+            //leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
+            //leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
+            leftFootCalibOffset.transform.localEulerAngles = new Vector3(j, k, l);
             print("Left foot position loaded from memory.");
         }
         else {
@@ -304,7 +300,9 @@ public class GameController : MonoBehaviour {
             k = PlayerPrefs.GetFloat("RightFootYRot");
             l = PlayerPrefs.GetFloat("RightFootZRot");
 
+            //rightFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
             rightFootCalibOffset.transform.localPosition = new Vector3(x, y, z);
+
             //leftFootCalibOffset.transform.rotation = Quaternion.Euler(j, k, l);
             //leftFoot.transform.position = new Vector3(leftFoot.transform.position.x, leftFootCalibModel.transform.position.y, leftFoot.transform.position.z);
             rightFootCalibOffset.transform.localEulerAngles = new Vector3(j, k, l);
@@ -318,6 +316,30 @@ public class GameController : MonoBehaviour {
             GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
             GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
         }
+    }
+
+    public void ResetRoomOffset(){
+        PlayerPrefs.SetFloat("RoomOffset", 0);
+        AlignRoomWithPlayer();
+    }
+
+    public void CalibrateRoomOffset(){
+        // Calibrate floor level to match the position of the controller that's lower (one should be in hand and one on floor at this point)
+        var a = calibrationPoint1.transform.position.y;
+        var b = calibrationPoint2.transform.position.y;
+        var y = a < b ? a : b;
+
+        PlayerPrefs.SetFloat("RoomOffset", y);
+        AlignRoomWithPlayer();
+    }
+
+    void AlignRoomWithPlayer(){
+        if (PlayerPrefs.HasKey("RoomOffset")) {
+            var y = PlayerPrefs.GetFloat("RoomOffset");
+            spawnroom.transform.position = new Vector3(0, y, 0);
+            tower.transform.position = new Vector3(0, y, 0);
+        }
+
     }
 
 	public void StartGame(){ // take room number as a variable if there's more than one room
