@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
@@ -62,6 +63,8 @@ public class GameController : MonoBehaviour {
     public Transform calibrationPoint1;
     public Transform calibrationPoint2;
 
+    public Text fallText;
+
 	AudioSource[] audios;
 	AudioSource ambientSound;
 	AudioSource windSound;
@@ -87,7 +90,7 @@ public class GameController : MonoBehaviour {
         es = elevator.GetComponent<ElevatorScript>();
         blinder = playerBlinder.GetComponent<Renderer>();
         blinderOrigColor = blinder.material.color;
-
+        ToggleFallAnimation();
 		//if (playerInSpawnRoom) {
 		//	newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
 		//	player.transform.position = newPosition;
@@ -121,11 +124,11 @@ public class GameController : MonoBehaviour {
             }else if (Input.GetKeyDown(KeyCode.L)) {
                 LoadFeetPositions();
             }
-			if (fallSwitch.GetComponent<NVRSwitchModified> ().CurrentState == true) {
-				fallEnabled = true;
-			} else {
-				fallEnabled = false;
-			}
+			//if (fallSwitch.GetComponent<NVRSwitchModified> ().CurrentState == true) {
+			//	fallEnabled = true;
+			//} else {
+			//	fallEnabled = false;
+			//}
 		} else {
 			if (falling) {
 				velocity -= fallAcceleration * Time.deltaTime;
@@ -323,6 +326,12 @@ public class GameController : MonoBehaviour {
         AlignRoomWithPlayer();
     }
 
+    public void SwitchFeet()
+    {
+        GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
+        GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
+    }
+
     public void CalibrateRoomOffset(){
         // Calibrate floor level to match the position of the controller that's lower (one should be in hand and one on floor at this point)
         var a = calibrationPoint1.transform.position.y;
@@ -396,6 +405,17 @@ public class GameController : MonoBehaviour {
         for (int i = 0; i < correctSpinnerSymbols.Length; i++) {
             correctSpinnerSymbols[i] = ReturnRandomAlphabet();
             print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
+        }
+    }
+
+    public void ToggleFallAnimation(){
+        if (fallEnabled) {
+            fallEnabled = false;
+            fallText.text = "Fall animation: off";
+        }
+        else {
+            fallEnabled = true;
+            fallText.text = "Fall animation: on";
         }
     }
 

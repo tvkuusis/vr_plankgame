@@ -10,10 +10,10 @@ public class PositionCalibration : MonoBehaviour {
     int pointsCalibrated = 0;
 	public GameObject startMarker;
 	public GameObject endMarker;
-    public float zeroY;
+    //public float zeroY;
 
 	public bool calibrating;
-	public GameObject calibrationPole;
+	//public GameObject calibrationPole;
 	float startPointDist;
 	float endPointDist;
 
@@ -64,21 +64,23 @@ public class PositionCalibration : MonoBehaviour {
 	public void PositionObject(){
         Vector3 newStart = Vector3.zero;
         Vector3 newEnd = Vector3.zero;
-		if (calibrationPole) {
-			startPointDist = Vector3.Distance (startMarker.transform.position, calibrationPole.transform.position);
-			endPointDist = Vector3.Distance (endMarker.transform.position, calibrationPole.transform.position);
-		}
-		if(startPointDist < endPointDist && calibrationPole) {
-            newStart = endMarker.transform.position;
-            newEnd = startMarker.transform.position;
-        }
-        else {
-            newStart = startMarker.transform.position;
-            newEnd = endMarker.transform.position;
-        }
+		//if (calibrationPole) {
+		//	startPointDist = Vector3.Distance (startMarker.transform.position, calibrationPole.transform.position);
+		//	endPointDist = Vector3.Distance (endMarker.transform.position, calibrationPole.transform.position);
+		//}
+		//if(startPointDist < endPointDist && calibrationPole) {
+  //          newStart = endMarker.transform.position;
+  //          newEnd = startMarker.transform.position;
+  //      }
+  //      else {
+  //          newStart = startMarker.transform.position;
+  //          newEnd = endMarker.transform.position;
+  //      }
+        newStart = startMarker.transform.position;
+        newEnd = endMarker.transform.position;
 
         // Position plank in midpoint between startposition and endposition
-		Vector3 midPoint = new Vector3((newStart.x + newEnd.x) / 2, 0, (newStart.z + newEnd.z) / 2);
+        Vector3 midPoint = new Vector3((newStart.x + newEnd.x) / 2, 0, (newStart.z + newEnd.z) / 2);
 		transform.localPosition = midPoint;
 
 		// Rotate object toward the startposition and fix the angle by 90 degrees

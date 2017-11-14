@@ -20,7 +20,9 @@ namespace NewtonVR
         {
             base.Awake();
             RungAngleInterval = 360f / (float)LETTERLIST.Length;
-            gc = GameObject.Find("GameController").GetComponent<GameController>();
+            if (GameObject.Find("GameController")) {
+                gc = GameObject.Find("GameController").GetComponent<GameController>();
+            }
         }
 
         protected override void FixedUpdate()
@@ -80,9 +82,11 @@ namespace NewtonVR
                 closest = 26;
 
             string character = LETTERLIST.Substring(closest, 1);
-			//print (character);
+            //print (character);
             // Send letter to gamecontroller
-            gc.SetSpinnerLetter(character, spinnerNumber);
+            if (gc) {
+                gc.SetSpinnerLetter(character, spinnerNumber);
+            }
             return character;
         }
     }
