@@ -22,9 +22,9 @@ public class FootMover : MonoBehaviour {
         transform.position = followThis.position;
         transform.rotation = followThis.rotation;
 
-        if (Input.GetKeyDown(KeyCode.J)) {
-            SwitchFoot();
-        }
+        //if (Input.GetKeyDown(KeyCode.J)) {
+        //    SwitchFoot();
+        //}
 	}
 
     public void SwitchFoot(){
