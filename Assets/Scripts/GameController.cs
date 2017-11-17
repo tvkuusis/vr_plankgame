@@ -11,10 +11,10 @@ public class GameController : MonoBehaviour {
 
 	bool falling;
 	public GameObject player;
-    public GameObject elevator;
-	public GameObject[] gameScenePlanks;
+    //public GameObject elevator;
+	//public GameObject[] gameScenePlanks;
 	public GameObject tower;
-    ElevatorScript es;
+    //ElevatorScript es;
 	public float fallAcceleration = 9.81f;
 	float velocity = 0;
 	float yDist = 0;
@@ -30,8 +30,9 @@ public class GameController : MonoBehaviour {
     public GameObject rightCalibModel;
     public GameObject playerBlinder;
 	public GameObject fallSwitch;
-	public GameObject fallColliders;
-	bool fallEnabled;
+	//public GameObject fallColliders;
+    [HideInInspector]
+	public bool fallEnabled;
     Renderer blinder;
     bool fadeout;
     bool fadein;
@@ -42,13 +43,13 @@ public class GameController : MonoBehaviour {
 	Transform leftFootPosOnStart;
 	Transform rightFootPosOnStart;
 
-    public Transform torchSpawn;
-    public GameObject torchPrefab;
+    //public Transform torchSpawn;
+    //public GameObject torchPrefab;
 
-    [HideInInspector]
-	public string[] correctSpinnerSymbols;
-    public bool[] spinnerStates;
-	bool elevatorActivated;
+ //   [HideInInspector]
+	//public string[] correctSpinnerSymbols;
+ //   public bool[] spinnerStates;
+	//bool elevatorActivated;
 
 	float t = 1f;
 	bool feetLoaded; // true after the game has positioned the feet models to saved positions
@@ -66,11 +67,11 @@ public class GameController : MonoBehaviour {
     public Text fallText;
 
 	AudioSource[] audios;
-	AudioSource ambientSound;
-	AudioSource windSound;
-	AudioSource thumpSound;
-	AudioSource pressSound;
-	AudioSource spinnerSound;
+    //AudioSource ambientSound;
+    AudioSource windSound;
+    AudioSource thumpSound;
+    AudioSource pressSound;
+    //AudioSource spinnerSound;
 
     private static GameController gameControllerInstance;
 
@@ -86,8 +87,8 @@ public class GameController : MonoBehaviour {
     //}
 
     void Start () {
-        SetSpinnerSymbols();
-        es = elevator.GetComponent<ElevatorScript>();
+        //SetSpinnerSymbols();
+        //es = elevator.GetComponent<ElevatorScript>();
         blinder = playerBlinder.GetComponent<Renderer>();
         blinderOrigColor = blinder.material.color;
         ToggleFallAnimation();
@@ -97,14 +98,14 @@ public class GameController : MonoBehaviour {
 		//}
 
 		audios = GetComponents<AudioSource> ();
-		ambientSound = audios [0];
+        pressSound = audios[0];
+		//ambientSound = audios [0];
 		windSound = audios [1];
 		thumpSound = audios [2];
-		pressSound = audios [3];
-		spinnerSound = audios [4];
+		//pressSound = audios [3];
+		//spinnerSound = audios [4];
 	}
 	
-	// Update is called once per frame
 	void Update () {
 
 		if (t > 0) {
@@ -136,7 +137,7 @@ public class GameController : MonoBehaviour {
 				newPosition = new Vector3 (player.transform.position.x, yDist, player.transform.position.z);
 				player.transform.position = newPosition;
 			}
-			CheckSpinnerStates ();
+			//CheckSpinnerStates ();
 		}
 
         // R - Reset scene  F - Fall    Q - quit    A 
@@ -152,8 +153,8 @@ public class GameController : MonoBehaviour {
 			QuitGame ();    
 		}
         if (Input.GetKeyDown(KeyCode.E)) {
-            es.ActivateElevator();
-            elevatorActivated = true;
+            //es.ActivateElevator();
+            //elevatorActivated = true;
         }
 
         if (fadeout) {
@@ -200,30 +201,28 @@ public class GameController : MonoBehaviour {
         }
     }
 
-    public void SetSpinnerLetter(string letter, int spinner){
-        if(letter == correctSpinnerSymbols[spinner]) {
-            spinnerStates[spinner] = true;
-        }
-        else {
-            spinnerStates[spinner] = false;
-        }
+    //public void SetSpinnerLetter(string letter, int spinner){
+    //    if(letter == correctSpinnerSymbols[spinner]) {
+    //        spinnerStates[spinner] = true;
+    //    }
+    //    else {
+    //        spinnerStates[spinner] = false;
+    //    }
+    //}
 
+  //  void CheckSpinnerStates(){
+		//if(spinnerStates[0] && spinnerStates[1] && spinnerStates[2] && !elevatorActivated) {
+  //          print("Correct letters");
+  //          es.ActivateElevator();
+		//	elevatorActivated = true;
+  //          // + Do something to the sliders
+  //      }
+  //  }
 
-    }
-
-    void CheckSpinnerStates(){
-		if(spinnerStates[0] && spinnerStates[1] && spinnerStates[2] && !elevatorActivated) {
-            print("Correct letters");
-            es.ActivateElevator();
-			elevatorActivated = true;
-            // + Do something to the sliders
-        }
-    }
-
-    public void MovePlayerWithElevator(){
-		fallColliders.SetActive (false);
-        player.transform.SetParent(elevator.transform);
-    }
+  //  public void MovePlayerWithElevator(){
+		//fallColliders.SetActive (false);
+  //      player.transform.SetParent(elevator.transform);
+  //  }
 
     public void CalibrateFeetPositions(){
 		pressSound.Play ();
@@ -362,17 +361,17 @@ public class GameController : MonoBehaviour {
 				spawnroom.SetActive (false);
 				playerInSpawnRoom = false;
 				tower.SetActive (true);
-				ambientSound.Play ();
-				if (fallEnabled) {
-					fallColliders.SetActive (true);
-				} else {
-					fallColliders.SetActive (false);
-				}
-                GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
+				//ambientSound.Play ();
+				//if (fallEnabled) {
+				//	fallColliders.SetActive (true);
+				//} else {
+				//	fallColliders.SetActive (false);
+				//}
+                //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
 				//InstantiateTorch ();
-				foreach (GameObject plank in gameScenePlanks) {
-					plank.GetComponent<PositionCalibration> ().LoadPosition ();
-				}
+				//foreach (GameObject plank in gameScenePlanks) {
+				//	plank.GetComponent<PositionCalibration> ().LoadPosition ();
+				//}
 			//} else {
 			//	print ("Feet not in correct position");
 			//}
@@ -389,12 +388,12 @@ public class GameController : MonoBehaviour {
         fadeout = true;
     }
 
-    string ReturnRandomAlphabet(){
-        //string alphabets = "ABCDEFghijklmnopqrstuVwxYz*"; egytian
-		string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
-        char c = alphabets[Random.Range(0, alphabets.Length)];
-        return c.ToString();
-    }
+  //  string ReturnRandomAlphabet(){
+  //      //string alphabets = "ABCDEFghijklmnopqrstuVwxYz*"; egytian
+		//string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
+  //      char c = alphabets[Random.Range(0, alphabets.Length)];
+  //      return c.ToString();
+  //  }
 
 	public void PlayerHitsBottom(){
 		windSound.Stop ();
@@ -402,14 +401,14 @@ public class GameController : MonoBehaviour {
 		StartFading ();
 	}
 
-    void SetSpinnerSymbols(){
-        correctSpinnerSymbols = new string[3];
-        spinnerStates = new bool[3];
-        for (int i = 0; i < correctSpinnerSymbols.Length; i++) {
-            correctSpinnerSymbols[i] = ReturnRandomAlphabet();
-            print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
-        }
-    }
+    //void SetSpinnerSymbols(){
+    //    correctSpinnerSymbols = new string[3];
+    //    spinnerStates = new bool[3];
+    //    for (int i = 0; i < correctSpinnerSymbols.Length; i++) {
+    //        correctSpinnerSymbols[i] = ReturnRandomAlphabet();
+    //        print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
+    //    }
+    //}
 
     public void ToggleFallAnimation(){
         if (fallEnabled) {

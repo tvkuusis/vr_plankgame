@@ -10,12 +10,12 @@ public class FootMover : MonoBehaviour {
     public GameObject leftFootTracker;
     public GameObject rightFootTracker;
     Transform followThis;
-    GameController gc;
+    //GameController gc;
 
 	void Start () {
         leftFoot = originalLeftFoot ? true : false;
         followThis = leftFoot ? leftFootTracker.transform : rightFootTracker.transform;
-        gc = GameObject.Find("GameController").GetComponent<GameController>();
+        //gc = GameObject.Find("GameController").GetComponent<GameController>();
 	}
 	
 	void Update () {

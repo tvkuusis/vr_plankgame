@@ -12,6 +12,7 @@ public class ElevatorScript : MonoBehaviour {
 	AudioSource stopSound;
 
     GameController gc;
+    TowerController tc;
 
     Transform currentStart;
     Transform currentEnd;
@@ -28,8 +29,9 @@ public class ElevatorScript : MonoBehaviour {
 		moveSound = audios [0];
 		stopSound = audios [1];
         gc = GameObject.Find("GameController").GetComponent<GameController>();
-        transform.position = startPosition.position;
-        currentStart = startPosition;
+        tc = GameObject.Find("Tower").GetComponent<TowerController>();
+        transform.position = midPosition.position;
+        currentStart = midPosition;
         currentEnd = midPosition;
 		//moveSound.Play ();
 	}
@@ -66,7 +68,7 @@ public class ElevatorScript : MonoBehaviour {
     }
 
     public void MoveToLevelEnd(){
-        gc.MovePlayerWithElevator();
+        tc.MovePlayerWithElevator();
         currentStart = currentEnd;
         currentEnd = endPosition;
         ActivateElevator();
