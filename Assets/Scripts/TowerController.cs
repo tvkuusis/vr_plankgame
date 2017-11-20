@@ -39,8 +39,8 @@ public class TowerController : MonoBehaviour {
         }
 
         InstantiateTorch();
-        RandomizeSpinnerSymbols();
-        GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
+        //RandomizeSpinnerSymbols();
+        //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
 
         audios = GetComponents<AudioSource>();
         ambientSound = audios[0];
@@ -48,7 +48,7 @@ public class TowerController : MonoBehaviour {
     }
 	
 	void Update () {
-        CheckSpinnerStates();
+        //CheckSpinnerStates();
     }
 
     public void InstantiateTorch()

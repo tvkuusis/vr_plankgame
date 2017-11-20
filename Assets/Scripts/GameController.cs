@@ -86,6 +86,12 @@ public class GameController : MonoBehaviour {
     //    }
     //}
 
+    private void Awake()
+    {
+        spawnroom.SetActive(true);
+        tower.SetActive(false);
+    }
+
     void Start () {
         //SetSpinnerSymbols();
         //es = elevator.GetComponent<ElevatorScript>();
