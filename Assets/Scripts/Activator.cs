@@ -10,8 +10,16 @@ public class Activator : MonoBehaviour {
     public UnityEvent whenPlaced;
     Vector3 origSize;
 
-    void Start () {
+    AudioSource[] audios;
+    AudioSource placeSound;
+    AudioSource rotateSound;
+
+    void Start() {
         origSize = item.transform.localScale;
+
+        audios = GetComponents<AudioSource>();
+        placeSound = audios[0];
+        rotateSound = audios[1];
     }
 	
 	void Update () {
@@ -27,6 +35,9 @@ public class Activator : MonoBehaviour {
     }
 
     void PlaceItem(GameObject col){
+        placeSound.Play();
+        rotateSound.Play();
+        col.GetComponent<NewtonVR.NVRInteractableItem>().ResetInteractable();
         col.transform.position = attachedPosition.position;
         col.transform.rotation = attachedPosition.rotation;
         item.transform.localScale = origSize;
@@ -37,6 +48,7 @@ public class Activator : MonoBehaviour {
     }
 
     public void Activate(){
+        rotateSound.Stop();
         whenPlaced.Invoke();
     }
 }
