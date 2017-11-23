@@ -22,12 +22,14 @@ public class GameController : MonoBehaviour {
 
     public GameObject leftFootModel;
     public GameObject rightFootModel;
+    public GameObject leftFootParent;
+    public GameObject rightFootParent;
     //public GameObject leftFootModel;
     //public GameObject rightFootModel;
 	public GameObject leftFootCalibOffset;
 	public GameObject rightFootCalibOffset;
-    public GameObject leftCalibModel;
-    public GameObject rightCalibModel;
+    public GameObject leftCalibPoint;
+    public GameObject rightCalibPoint;
     public GameObject playerBlinder;
 	public GameObject fallSwitch;
 	//public GameObject fallColliders;
@@ -117,11 +119,12 @@ public class GameController : MonoBehaviour {
 		if (t > 0) {
 			t -= Time.deltaTime;
 		} else if (t <= 0 && !feetLoaded) {
-			
-			LoadFeetPositions();
+            if (leftFootParent.activeSelf && rightFootParent.activeSelf) {
+                LoadFeetPositions();
+            }
             AlignRoomWithPlayer();
-			feetLoaded = true;
-		}
+            feetLoaded = true;
+        }
 
 		if (playerInSpawnRoom) {
 			//newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
@@ -232,22 +235,27 @@ public class GameController : MonoBehaviour {
 
     public void CalibrateFeetPositions(){
 		pressSound.Play ();
-		leftFootModel.SetActive (true);
-		rightFootModel.SetActive (true);
+        if (leftFootParent.activeSelf && rightFootParent.activeSelf) {
+            leftFootModel.SetActive(true);
+            rightFootModel.SetActive(true);
 
-        /////////////////////////
-        leftFootCalibOffset.transform.position = leftCalibModel.transform.position;
-		leftFootModel.transform.position = new Vector3(leftFootModel.transform.position.x, leftFootModel.transform.position.y, leftFootModel.transform.position.z);
-		leftFootCalibOffset.transform.rotation = leftCalibModel.transform.rotation;
-        //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
+            /////////////////////////
+            leftFootCalibOffset.transform.position = leftCalibPoint.transform.position;
+            leftFootModel.transform.position = new Vector3(leftFootModel.transform.position.x, leftFootModel.transform.position.y, leftFootModel.transform.position.z);
+            leftFootCalibOffset.transform.rotation = leftCalibPoint.transform.rotation;
+            //leftFootCalibOffset.transform.forward = leftFootCalibModel.transform.forward;
 
-        rightFootCalibOffset.transform.position = rightCalibModel.transform.position;
-		rightFootModel.transform.position = new Vector3(rightFootModel.transform.position.x, rightCalibModel.transform.position.y, rightFootModel.transform.position.z);
-		rightFootCalibOffset.transform.rotation = rightCalibModel.transform.rotation;
+            rightFootCalibOffset.transform.position = rightCalibPoint.transform.position;
+            rightFootModel.transform.position = new Vector3(rightFootModel.transform.position.x, rightCalibPoint.transform.position.y, rightFootModel.transform.position.z);
+            rightFootCalibOffset.transform.rotation = rightCalibPoint.transform.rotation;
 
-        print("Feet calibrated");
-        SaveFeetPositions();
-        //LoadFeetPositions();
+            print("Feet calibrated");
+            SaveFeetPositions();
+            //LoadFeetPositions();
+        }
+        else {
+            print("Feet are not found. Are both foot trackers turned on and paired correctly?");
+        }
     }
 
     void SaveFeetPositions(){
@@ -336,8 +344,16 @@ public class GameController : MonoBehaviour {
 
     public void SwitchFeet()
     {
-        GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
-        GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
+        if(leftFootParent.activeSelf && rightFootParent.activeSelf) {
+            leftFootParent.GetComponent<FootMover>().SwitchFoot();
+            rightFootParent.GetComponent<FootMover>().SwitchFoot();
+            print("Feet switched");
+        }
+        else {
+            print("Feet not switched - are both feet trackers on and paired correctly?");
+        }
+        //GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
+        //GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
     }
 
     public void CalibrateRoomOffset(){
@@ -360,6 +376,7 @@ public class GameController : MonoBehaviour {
     }
 
 	public void StartGame(){ // take room number as a variable if there's more than one room
+        print("Player in spawn room: " + playerInSpawnRoom);
 		if (playerInSpawnRoom) {
 			//if (leftFootInPosition && rightFootInposition) {
 				pressSound.Play ();
@@ -367,26 +384,8 @@ public class GameController : MonoBehaviour {
 				spawnroom.SetActive (false);
 				playerInSpawnRoom = false;
 				tower.SetActive (true);
-				//ambientSound.Play ();
-				//if (fallEnabled) {
-				//	fallColliders.SetActive (true);
-				//} else {
-				//	fallColliders.SetActive (false);
-				//}
-                //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
-				//InstantiateTorch ();
-				//foreach (GameObject plank in gameScenePlanks) {
-				//	plank.GetComponent<PositionCalibration> ().LoadPosition ();
-				//}
-			//} else {
-			//	print ("Feet not in correct position");
-			//}
 		} else if (!playerInSpawnRoom) {
 			SceneManager.LoadScene (SceneManager.GetActiveScene ().buildIndex);
-			//print ("Back to spawn room");
-			//spawnroom.SetActive (true);
-			//playerInSpawnRoom = true;
-			//gameRoom.SetActive (false);
 		}
 	}
 
@@ -394,27 +393,11 @@ public class GameController : MonoBehaviour {
         fadeout = true;
     }
 
-  //  string ReturnRandomAlphabet(){
-  //      //string alphabets = "ABCDEFghijklmnopqrstuVwxYz*"; egytian
-		//string alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ?";
-  //      char c = alphabets[Random.Range(0, alphabets.Length)];
-  //      return c.ToString();
-  //  }
-
 	public void PlayerHitsBottom(){
 		windSound.Stop ();
 		thumpSound.Play ();
 		StartFading ();
 	}
-
-    //void SetSpinnerSymbols(){
-    //    correctSpinnerSymbols = new string[3];
-    //    spinnerStates = new bool[3];
-    //    for (int i = 0; i < correctSpinnerSymbols.Length; i++) {
-    //        correctSpinnerSymbols[i] = ReturnRandomAlphabet();
-    //        print("Spinner " + i + " correct: " + correctSpinnerSymbols[i]);
-    //    }
-    //}
 
     public void ToggleFallAnimation(){
         if (fallEnabled) {
@@ -426,17 +409,4 @@ public class GameController : MonoBehaviour {
             fallText.text = "Fall animation: on";
         }
     }
-
-    //public void SwitchFeet()
-    //{
-    //    feetSwitched = feetSwitched ? false : true;
-    //    if (feetSwitched) {
-    //        PlayerPrefs.SetInt("FeetSwitched", 1);
-    //        print("Feet inverted");
-    //    }
-    //    else {
-    //        PlayerPrefs.SetInt("FeetSwitched", 0);
-    //        print("Feet normal");
-    //    }
-    //}
 }

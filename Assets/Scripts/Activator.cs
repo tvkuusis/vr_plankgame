@@ -37,6 +37,11 @@ public class Activator : MonoBehaviour {
 
     void PlaceItem(GameObject col){
         whenPlaced.Invoke();
+        if (col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand) {
+            var hand = col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand;
+            hand.EndInteraction(item.GetComponent<NewtonVR.NVRInteractable>());
+        }
+        //print(hand);
         placeSound.Play();
         rotateSound.Play();
         //col.GetComponent<NewtonVR.NVRInteractableItem>().ResetInteractable();
