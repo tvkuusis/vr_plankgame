@@ -119,11 +119,11 @@ public class GameController : MonoBehaviour {
 		if (playerInSpawnRoom) {
 			//newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
 			//player.transform.position = newPosition;
-            if (Input.GetKeyDown(KeyCode.M)) {
-                CalibrateFeetPositions();
-            }else if (Input.GetKeyDown(KeyCode.L)) {
-                LoadFeetPositions();
-            }
+            //if (Input.GetKeyDown(KeyCode.M)) {
+            //    CalibrateFeetPositions();
+            //}else if (Input.GetKeyDown(KeyCode.L)) {
+            //    LoadFeetPositions();
+            //}
 			//if (fallSwitch.GetComponent<NVRSwitchModified> ().CurrentState == true) {
 			//	fallEnabled = true;
 			//} else {
@@ -139,6 +139,8 @@ public class GameController : MonoBehaviour {
 			CheckSpinnerStates ();
 		}
 
+        // R - Reset scene  F - Fall    Q - quit    A 
+
 		if (Input.GetKeyDown (KeyCode.R)) {
 			ResetScene ();
 		}
@@ -149,8 +151,9 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q)) {
 			QuitGame ();    
 		}
-        if (Input.GetKeyDown(KeyCode.A)) {
-            CalibrateRoomOffset();
+        if (Input.GetKeyDown(KeyCode.E)) {
+            es.ActivateElevator();
+            elevatorActivated = true;
         }
 
         if (fadeout) {
