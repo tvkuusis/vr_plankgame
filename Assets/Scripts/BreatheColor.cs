@@ -11,28 +11,28 @@ public class BreatheColor : MonoBehaviour {
     Renderer rend;
     Material mat;
     Color origColor;
+    Vector3 origPos;
 
 	void Start () {
         rend = GetComponent<Renderer>();
         mat = rend.material;
         origColor = mat.GetColor("_EmissionColor");
+        origPos = transform.localPosition;
         //print(origColor);
 	}
 	
 	void Update () {
+        SetEmission();
+    }
+
+    void SetEmission(){
         float emission = Mathf.PingPong(Time.time * speed, maxEmission);
-        //Color baseColor = origColor; //Replace this with whatever you want for your base color at emission level '1'
-        //Color basecol = new Color(1, 0, 0, emission); // someValue adjust the scale of emission
-        //Color finalColor = origColor * Mathf.LinearToGammaSpace(emission);
-        //mat.SetColor("_EmissionColor", finalColor);
 
-        var distance = 1 / Vector3.Distance(transform.position, pedestal.position);
-        var dist_scaled = distance / 170;
-        //var dist_n = Mathf.InverseLerp(0, 150, distance); // hack
-        //print(dist_n);
-        Color finalColor = origColor * Mathf.LinearToGammaSpace(dist_scaled);
+        var distance = Vector3.Distance(transform.position, pedestal.position);
+        print(distance);
+        var emissionlevel = maxEmission - distance * 5; // hack
+
+        Color finalColor = origColor * Mathf.LinearToGammaSpace(emissionlevel);
         mat.SetColor("_EmissionColor", finalColor);
-
-
     }
 }
