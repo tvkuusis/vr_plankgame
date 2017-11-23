@@ -10,10 +10,8 @@ public class PositionCalibration : MonoBehaviour {
     int pointsCalibrated = 0;
 	public GameObject startMarker;
 	public GameObject endMarker;
-    //public float zeroY;
 
 	public bool calibrating;
-	//public GameObject calibrationPole;
 	float startPointDist;
 	float endPointDist;
 
@@ -34,7 +32,6 @@ public class PositionCalibration : MonoBehaviour {
 
     public void CalibratePosition(Transform newPosition){
         if(pointsCalibrated == 0) {
-			//newPosition.position = new Vector3 (newPosition.position.x, 0, newPosition.position.z);
             startPosition = newPosition;
 			PlayerPrefs.SetFloat ("PlankStartX", newPosition.transform.position.x);
 			PlayerPrefs.SetFloat ("PlankStartY", newPosition.transform.position.y);
@@ -43,7 +40,6 @@ public class PositionCalibration : MonoBehaviour {
             print("Position " + newPosition + " added as start position.");
 			startMarker.transform.position = startPosition.position;
         }else if (pointsCalibrated == 1) {
-			//newPosition.position = new Vector3 (newPosition.position.x, 0, newPosition.position.z);
             endPosition = newPosition;
 			PlayerPrefs.SetFloat ("PlankEndX", newPosition.transform.position.x);
 			PlayerPrefs.SetFloat ("PlankEndY", newPosition.transform.position.y);
@@ -64,29 +60,15 @@ public class PositionCalibration : MonoBehaviour {
 	public void PositionObject(){
         Vector3 newStart = Vector3.zero;
         Vector3 newEnd = Vector3.zero;
-		//if (calibrationPole) {
-		//	startPointDist = Vector3.Distance (startMarker.transform.position, calibrationPole.transform.position);
-		//	endPointDist = Vector3.Distance (endMarker.transform.position, calibrationPole.transform.position);
-		//}
-		//if(startPointDist < endPointDist && calibrationPole) {
-  //          newStart = endMarker.transform.position;
-  //          newEnd = startMarker.transform.position;
-  //      }
-  //      else {
-  //          newStart = startMarker.transform.position;
-  //          newEnd = endMarker.transform.position;
-  //      }
+
         newStart = startMarker.transform.position;
         newEnd = endMarker.transform.position;
 
-        // Position plank in midpoint between startposition and endposition
         Vector3 midPoint = new Vector3((newStart.x + newEnd.x) / 2, 0, (newStart.z + newEnd.z) / 2);
 		transform.localPosition = midPoint;
 
-		// Rotate object toward the startposition and fix the angle by 90 degrees
 		transform.LookAt(new Vector3(newStart.x, transform.position.y, newStart.z));
-		//transform.right = transform.forward;
-		//transform.rotation = Quaternion.Euler(transform.rotation.x, transform.rotation.y, 0);
+
 		pointsCalibrated = 0;
 		calibrating = false;
 	}

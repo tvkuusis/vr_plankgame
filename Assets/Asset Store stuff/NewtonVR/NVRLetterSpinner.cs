@@ -14,14 +14,18 @@ namespace NewtonVR
         private Vector3 LastAngularVelocity = Vector3.zero;
 
         public int spinnerNumber;
-        GameController gc;
+        //GameController gc;
+        TowerController tc;
 
         protected override void Awake()
         {
             base.Awake();
             RungAngleInterval = 360f / (float)LETTERLIST.Length;
-            if (GameObject.Find("GameController")) {
-                gc = GameObject.Find("GameController").GetComponent<GameController>();
+            //if (GameObject.Find("GameController")) {
+            //    gc = GameObject.Find("GameController").GetComponent<GameController>();
+            //}
+            if (GameObject.Find("Tower")) {
+                tc = GameObject.Find("Tower").GetComponent<TowerController>();
             }
         }
 
@@ -84,8 +88,11 @@ namespace NewtonVR
             string character = LETTERLIST.Substring(closest, 1);
             //print (character);
             // Send letter to gamecontroller
-            if (gc) {
-                gc.SetSpinnerLetter(character, spinnerNumber);
+            //if (gc) {
+            //    gc.SetSpinnerLetter(character, spinnerNumber);
+            //}
+            if (tc) {
+                tc.UpdateSpinnerStates(character, spinnerNumber);
             }
             return character;
         }
