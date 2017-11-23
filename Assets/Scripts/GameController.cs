@@ -161,9 +161,10 @@ public class GameController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.Q)) {
 			QuitGame ();    
 		}
-        if (Input.GetKeyDown(KeyCode.E)) {
-            //es.ActivateElevator();
-            //elevatorActivated = true;
+        if (Input.GetKeyDown(KeyCode.N)) {
+            if (playerInSpawnRoom) {
+                StartFading();
+            }
         }
 
         if (fadeout) {
