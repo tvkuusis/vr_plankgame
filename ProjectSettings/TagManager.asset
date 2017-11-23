@@ -9,6 +9,7 @@ TagManager:
   - projectile
   - Bottom
   - Tile
+  - TriggerTile
   layers:
   - Default
   - TransparentFX
