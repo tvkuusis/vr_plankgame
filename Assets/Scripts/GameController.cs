@@ -33,8 +33,8 @@ public class GameController : MonoBehaviour {
     public GameObject playerBlinder;
 	public GameObject fallSwitch;
 	//public GameObject fallColliders;
-    [HideInInspector]
-	public bool fallEnabled;
+
+	public bool fallEnabled = true;
     Renderer blinder;
     bool fadeout;
     bool fadein;
@@ -100,6 +100,7 @@ public class GameController : MonoBehaviour {
         blinder = playerBlinder.GetComponent<Renderer>();
         blinderOrigColor = blinder.material.color;
         ToggleFallAnimation();
+
 		//if (playerInSpawnRoom) {
 		//	newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
 		//	player.transform.position = newPosition;
@@ -110,8 +111,8 @@ public class GameController : MonoBehaviour {
 		//ambientSound = audios [0];
 		windSound = audios [1];
 		thumpSound = audios [2];
-		//pressSound = audios [3];
-		//spinnerSound = audios [4];
+        //pressSound = audios [3];
+        //spinnerSound = audios [4];
 	}
 	
 	void Update () {
@@ -401,6 +402,7 @@ public class GameController : MonoBehaviour {
 	}
 
     public void ToggleFallAnimation(){
+        print("Fall enabled: " + fallEnabled);
         if (fallEnabled) {
             fallEnabled = false;
             fallText.text = "Fall animation: off";
@@ -409,5 +411,6 @@ public class GameController : MonoBehaviour {
             fallEnabled = true;
             fallText.text = "Fall animation: on";
         }
+        print("Fall enabled: " + fallEnabled);
     }
 }

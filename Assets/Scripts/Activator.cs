@@ -7,7 +7,7 @@ public class Activator : MonoBehaviour {
 
     public GameObject item;
     public Transform attachedPosition;
-    public UnityEvent whenPlaced;
+    //public UnityEvent whenPlaced;
     public UnityEvent whenActivated;
     Vector3 origSize;
 
@@ -36,7 +36,7 @@ public class Activator : MonoBehaviour {
     }
 
     void PlaceItem(GameObject col){
-        whenPlaced.Invoke();
+        //whenPlaced.Invoke();
         if (col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand) {
             var hand = col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand;
             hand.EndInteraction(item.GetComponent<NewtonVR.NVRInteractable>());
