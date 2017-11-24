@@ -25,6 +25,8 @@ public class PlayerFallScript : MonoBehaviour {
             //print(gameObject.transform.parent.name +  " grounded.");
 			rend.material.color = origC;
 			//rend.material.color = new Color (0, 1, 0, 1);
+        }else if (!col.CompareTag("Ground")) {
+            grounded = false;
         }
     }
 
