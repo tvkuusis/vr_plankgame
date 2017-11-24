@@ -38,7 +38,7 @@ public class TowerController : MonoBehaviour {
             plank.GetComponent<PositionCalibration>().LoadPosition();
         }
 
-        InstantiateTorch();
+        //InstantiateTorch();
         //RandomizeSpinnerSymbols();
         //GameObject.Find("Clue Generator").GetComponent<ClueGenerator>().AssignClues(correctSpinnerSymbols[0], correctSpinnerSymbols[1], correctSpinnerSymbols[2]);
 

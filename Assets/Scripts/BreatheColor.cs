@@ -29,7 +29,6 @@ public class BreatheColor : MonoBehaviour {
         float emission = Mathf.PingPong(Time.time * speed, maxEmission);
 
         var distance = Vector3.Distance(transform.position, pedestal.position);
-        print(distance);
         var emissionlevel = maxEmission - distance * 5; // hack
 
         Color finalColor = origColor * Mathf.LinearToGammaSpace(emissionlevel);
