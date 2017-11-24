@@ -9,6 +9,7 @@ public class TileScript : MonoBehaviour {
     bool drop;
 	
 	public void Drop() {
+        GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
         GetComponent<Rigidbody>().useGravity = true;
     }    
 }

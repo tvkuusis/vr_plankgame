@@ -13,9 +13,9 @@ public class FootMover : MonoBehaviour {
     //GameController gc;
 
 	void Start () {
-        if(!leftFootTracker.activeSelf || !rightFootTracker.activeSelf) {
-            gameObject.SetActive(false);
-        }
+        //if(!leftFootTracker.activeSelf || !rightFootTracker.activeSelf) {
+        //    gameObject.SetActive(false);
+        //}
         leftFoot = originalLeftFoot ? true : false;
         followThis = leftFoot ? leftFootTracker.transform : rightFootTracker.transform;
         //gc = GameObject.Find("GameController").GetComponent<GameController>();
