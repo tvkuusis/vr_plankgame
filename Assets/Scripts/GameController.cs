@@ -200,7 +200,9 @@ public class GameController : MonoBehaviour {
 
 	public void PlayerFall(){
 		falling = true;
-	}
+        yDist = player.transform.position.y;
+        windSound.Play();
+    }
 
     public void FallCheck(){
         bool left = leftFootModel.GetComponentInChildren<PlayerFallScript>().grounded;
@@ -208,7 +210,6 @@ public class GameController : MonoBehaviour {
 
 		if(!left && !right && !falling) {
             PlayerFall();
-			windSound.Play ();
         }
     }
 
