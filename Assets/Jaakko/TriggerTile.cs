@@ -5,24 +5,34 @@ using UnityEngine;
 public class TriggerTile : MonoBehaviour {
 
     float timeToTrigger = 2;
-    float t;
+    public float t;
 
-    TileDropper td;
+    public TileDropper td;
 
-    bool playerInTrigger;
-    bool tileDropCalled;
+    public bool playerInTrigger;
+    public bool tileDropCalled;
 
-    public bool dropCertainTiles;    
+    public bool dropCertainTiles;
+
+    Color origColor;
+    Renderer rend;
+    Material mat;
 
 	void Start () {
-        td = GameObject.Find("TileDropper").GetComponent<TileDropper>();
-	}
+        //td = GameObject.Find("TileDropper").GetComponent<TileDropper>();
+        rend = GetComponentInChildren<Renderer>();
+        mat = rend.material;
+        origColor = mat.GetColor("_EmissionColor");
+    }
 	
 	void Update () {
 		if (playerInTrigger && !tileDropCalled) {
             t += Time.deltaTime;
+            Color newColor = Color.red * Mathf.LinearToGammaSpace(t / 2f);
+            mat.SetColor("_EmissionColor", newColor);
+
             if (t >= timeToTrigger) {
-                td.DropTiles();
+                td.DropTiles( transform.position );
                 tileDropCalled = true;
             }
         }
@@ -37,6 +47,7 @@ public class TriggerTile : MonoBehaviour {
     }
 
     public void PlayerStepsOnOffTile(bool on) {
+        Debug.Log("PlayerStepsOnOffTile()");
         if (tileDropCalled) return;
         if (on) {
             if (dropCertainTiles) {
@@ -45,15 +56,18 @@ public class TriggerTile : MonoBehaviour {
             } else if (!playerInTrigger) {
                 Rumble(true);
                 playerInTrigger = true;
+                print("playerintrigger = true");
             }
         } else {
             if (playerInTrigger) {
                 Rumble(false);
                 t = 0;
                 playerInTrigger = false;
+                mat.SetColor("_EmissionColor", origColor);
             }
         }
     }
+
 
     //private void OnTriggerEnter(Collider c) {
     //    if (tileDropCalled || c.tag != "Player") return;
