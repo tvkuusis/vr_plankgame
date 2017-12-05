@@ -65,6 +65,7 @@ public class TileDropper : MonoBehaviour {
                 if (Vector3.Distance(transform.position, tileList[j].transform.position) < dist) {
                     tempGO = tileList[j];
                     dist = Vector3.Distance(transform.position, tileList[j].transform.position);
+                    tileList[j].transform.Rotate(Vector3.up, 180 * Random.Range(0, 2));
                 }
             }
 
@@ -75,12 +76,12 @@ public class TileDropper : MonoBehaviour {
         yield return new WaitForSeconds(0.1f);
 
         if (tiles.Length != tileScriptList.Count) {
-            print("something wrong");
+            Debug.LogError("tiles.Length != tileScriptList.Count");
         } else {
             tileScripts = tileScriptList.ToArray();
             tileScriptList.Clear();
             tileList.Clear();
-        }        
+        }
     }
 
     public IEnumerator ReorderAndDrop(Vector3 pos)
