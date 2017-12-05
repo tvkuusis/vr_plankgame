@@ -126,6 +126,11 @@ public class TileDropper : MonoBehaviour {
         drop = true;
     }
 
+    public void DropTiles()
+    {
+        DropTiles(transform.position);
+    }
+
     public void DropTiles(Vector3 pos) {
         print("droptiles called");
         StartCoroutine(ReorderAndDrop(pos));

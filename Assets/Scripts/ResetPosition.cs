@@ -11,6 +11,8 @@ public class ResetPosition : MonoBehaviour
 
     void Start()
     {
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         pos = transform.localPosition;
         rot = transform.localRotation;
     }
@@ -18,10 +20,10 @@ public class ResetPosition : MonoBehaviour
     void OnTriggerExit(Collider col)
     {
         if (col.gameObject == exitCollider) {
-            GetComponent<Rigidbody>().velocity = Vector3.zero;
-            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
             transform.localPosition = pos;
             transform.localRotation = rot;
+            GetComponent<Rigidbody>().velocity = Vector3.zero;
+            GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
         }
     }
 }
