@@ -8,7 +8,7 @@ public class TowerController : MonoBehaviour {
     public Transform torchSpawn;
     public GameObject torchPrefab;
     public GameObject elevator;
-    public GameObject fallColliders;
+    public GameObject[] fallColliders;
     public GameObject clueGenerator;
     public GameObject[] planks;
 
@@ -24,15 +24,16 @@ public class TowerController : MonoBehaviour {
     AudioSource ambientSound;
     AudioSource spinnerSound;
 
-    void Start () {
+    void Start() {
         es = elevator.GetComponent<ElevatorScript>();
         gc = GameObject.Find("GameController").GetComponent<GameController>();
 
-        if (gc.fallEnabled) {
-            fallColliders.SetActive(true);
-        }else {
-            fallColliders.SetActive(false);
-        }
+
+            if (gc.fallEnabled) {
+                ToggleFallColliders(true);
+            }else {
+                ToggleFallColliders(false);
+            }
 
         foreach (GameObject plank in planks) {
             plank.GetComponent<PositionCalibration>().LoadPosition();
@@ -84,9 +85,20 @@ public class TowerController : MonoBehaviour {
         }
     }
 
+    public void ToggleFallColliders(bool enabled){
+        for (int i = 0; i < fallColliders.Length; i++) {
+            if (enabled && gc.fallEnabled) {
+                fallColliders[i].SetActive(true);
+            }
+            else {
+                fallColliders[i].SetActive(false);
+            }
+        }
+    }
+
     public void MovePlayerWithElevator()
     {
-        fallColliders.SetActive(false);
+        ToggleFallColliders(false);
         player.transform.SetParent(elevator.transform);
     }
 
