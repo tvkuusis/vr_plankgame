@@ -80,10 +80,54 @@ public class TileDropper : MonoBehaviour {
         }        
     }
 
-    public void DropTiles() {
+    public IEnumerator ReorderAndDrop(Vector3 pos)
+    {
+        // temporary lists
+        List<TileScript> tileScriptList = new List<TileScript>() { };
+        List<GameObject> tileList = new List<GameObject>() { };
+
+        // fill the list we remove the closest GameObjects from
+        foreach (GameObject go in tiles) {
+            tileList.Add(go);
+        }
+
+        for (int i = 0; i < tiles.Length; i++) {
+            // temporary closest GameObject
+            GameObject tempGO = tiles[i];
+            // shortest distance
+            float dist = Mathf.Infinity;
+
+            for (int j = 0; j < tileList.Count; j++) {
+                if (Vector3.Distance(pos, tileList[j].transform.position) < dist) {
+                    tempGO = tileList[j];
+                    dist = Vector3.Distance(pos, tileList[j].transform.position);
+                }
+            }
+
+            tileScriptList.Add(tempGO.GetComponent<TileScript>());
+            tileList.Remove(tempGO);
+        }
+
+        if (tiles.Length != tileScriptList.Count) {
+            print("something wrong");
+        }
+        else {
+            tileScripts = tileScriptList.ToArray();
+            tileScriptList.Clear();
+            tileList.Clear();
+        }
+        yield return new WaitForSeconds(0);
         interval = startInterval;
         intervalDecreaseStep = interval;
         drop = true;
+    }
+
+    public void DropTiles(Vector3 pos) {
+        print("droptiles called");
+        StartCoroutine(ReorderAndDrop(pos));
+        //    interval = startInterval;
+        //    intervalDecreaseStep = interval;
+        //    drop = true;
     }
 
     public void DropCertainTiles() {
@@ -94,7 +138,7 @@ public class TileDropper : MonoBehaviour {
 
     void Update () {
 
-        if (Input.GetKeyDown(KeyCode.D)) DropTiles();
+        if (Input.GetKeyDown(KeyCode.D)) DropTiles(transform.position);
         if (Input.GetKeyDown(KeyCode.C)) DropCertainTiles();
 
         if (drop) {
