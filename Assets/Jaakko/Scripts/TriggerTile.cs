@@ -8,6 +8,7 @@ public class TriggerTile : MonoBehaviour {
     public float t;
 
     public TileDropper td;
+    WallShaker wallShaker;
 
     public bool playerInTrigger;
     public bool tileDropCalled;
@@ -20,6 +21,7 @@ public class TriggerTile : MonoBehaviour {
 
 	void Start () {
         //td = GameObject.Find("TileDropper").GetComponent<TileDropper>();
+        wallShaker = GameObject.Find("WallShaker").GetComponent<WallShaker>();
         rend = GetComponentInChildren<Renderer>();
         mat = rend.material;
         origColor = mat.GetColor("_EmissionColor");
@@ -43,8 +45,10 @@ public class TriggerTile : MonoBehaviour {
     void Rumble(bool startStop) {
         if (startStop) {
             print("Play rumble audio + dustFromRoof particles");
+            wallShaker.StartShake();
         } else {
             print("Stop rumble audio");
+            wallShaker.EndShake();
         }        
     }
 

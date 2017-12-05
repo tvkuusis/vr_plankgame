@@ -15,6 +15,12 @@ public class WallShaker : MonoBehaviour {
 
     public bool shake;
 
+    float fadeTime = 0.5f;
+    float volume;
+    bool cooldown;
+    float maxTime;
+    float t;
+
 	void Start () {
         if (transformsToShake.Length == 0) {
             Debug.LogWarning("transformsToShake.Length = 0");
@@ -26,9 +32,14 @@ public class WallShaker : MonoBehaviour {
             transformYheights = floatList.ToArray();
             //Invoke("StartShake", 2);
         }
+        if (audioSources.Length > 0) {
+            maxTime = audioSources[0].clip.length;
+        }
 	}
 
     public void StartShake() {
+        if (shake) return;
+
         if (transformsToShake.Length == 0) {
             Debug.LogWarning("transformsToShake.Length = 0");
         } else {
@@ -39,6 +50,7 @@ public class WallShaker : MonoBehaviour {
         if (audioSources.Length == 0) {
             Debug.LogWarning("audioSources.Length = 0");
         } else {
+            t = 0;
             for (int i = 0; i < audioSources.Length; i++) {
                 audioSources[i].Play();
             }
@@ -48,13 +60,15 @@ public class WallShaker : MonoBehaviour {
     }
 
     public void EndShake() {
+        if (!shake) return;
         shake = false;
         if (audioSources.Length == 0) {
             Debug.LogWarning("audioSources.Length = 0");
         } else {
-            for (int i = 0; i < audioSources.Length; i++) {
-                audioSources[i].Stop();
-            }
+            //for (int i = 0; i < audioSources.Length; i++) {
+            //    audioSources[i].Stop();
+            //}
+            cooldown = true;
         }
     }
 
@@ -72,9 +86,30 @@ public class WallShaker : MonoBehaviour {
         }
     }
 
-	void Update () {
-        if (!shake) return;
+    void Fade() {
+        if (volume == 0) {
+            for (int i = 0; i < audioSources.Length; i++) {
+                audioSources[i].Stop();
+                volume = 1;
+                audioSources[i].volume = volume;
+            }
+            cooldown = false;
+        } else {
+            volume -= Time.deltaTime / fadeTime;
+            if (volume < 0) volume = 0;
+            for (int i = 0; i < audioSources.Length; i++) {
+                audioSources[i].volume = volume;
+            }
+        }
+    }
 
-        Shake();
+	void Update () {
+        if (cooldown) {
+            Fade();
+        } else if (shake) {
+            Shake();
+            t += Time.deltaTime;
+            if (t >= maxTime - fadeTime) EndShake();
+        }
     }
 }
