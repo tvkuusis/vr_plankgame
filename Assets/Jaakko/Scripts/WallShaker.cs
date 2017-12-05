@@ -16,6 +16,7 @@ public class WallShaker : MonoBehaviour {
     public bool shake;
 
     float fadeTime = 0.5f;
+    float startVolume;
     float volume;
     bool cooldown;
     float maxTime;
@@ -34,6 +35,7 @@ public class WallShaker : MonoBehaviour {
         }
         if (audioSources.Length > 0) {
             maxTime = audioSources[0].clip.length;
+            startVolume = audioSources[0].volume;
         }
 	}
 
@@ -70,6 +72,9 @@ public class WallShaker : MonoBehaviour {
             //}
             cooldown = true;
         }
+        for (int i = 0; i < transformsToShake.Length; i++) {
+            transformsToShake[i].position = new Vector3(transform.position.x, startY, transform.position.z);
+        }
     }
 
     void Shake() {
@@ -90,12 +95,12 @@ public class WallShaker : MonoBehaviour {
         if (volume == 0) {
             for (int i = 0; i < audioSources.Length; i++) {
                 audioSources[i].Stop();
-                volume = 1;
+                volume = startVolume;
                 audioSources[i].volume = volume;
             }
             cooldown = false;
         } else {
-            volume -= Time.deltaTime / fadeTime;
+            volume -= Time.deltaTime / fadeTime * startVolume;
             if (volume < 0) volume = 0;
             for (int i = 0; i < audioSources.Length; i++) {
                 audioSources[i].volume = volume;
