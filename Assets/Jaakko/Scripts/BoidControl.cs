@@ -34,6 +34,9 @@ public class BoidControl : MonoBehaviour {
     public bool newWeightsSet;
 
     public bool boidsCreated;
+    bool batsActive;
+
+    public GameObject batAudio;
 
     void Start() {
         controlCollider = GetComponent<Collider>();
@@ -45,6 +48,16 @@ public class BoidControl : MonoBehaviour {
             boids[i].SetActive(false);
         }
         gameObject.SetActive(false);
+        batAudio.GetComponent<AudioSource>().Stop();
+    }
+
+    public void StartBats()
+    {
+        for (int i = 0; i < boids.Length; i++) {
+            boids[i].SetActive(true);
+        }
+        batsActive = true;
+        batAudio.GetComponent<AudioSource>().Play();
     }
 
     IEnumerator CreateBoids() {
@@ -64,6 +77,7 @@ public class BoidControl : MonoBehaviour {
 
         for (int i = 0; i < boids.Length; i++) {
             boids[i].GetComponent<BoidBat>().SetOtherBoidsArray();
+            boids[i].SetActive(false);
         }
 
         boidsCreated = true;
@@ -85,7 +99,7 @@ public class BoidControl : MonoBehaviour {
 
     void Update() {
 
-        if (!boidsCreated) return;
+        if (!boidsCreated || !batsActive) return;
 
         if (setNewWeights) SetNewWeights();
 
@@ -100,5 +114,7 @@ public class BoidControl : MonoBehaviour {
 
         flockCenter = theCenter / (flockSize);
         flockVelocity = theVelocity / (flockSize);
+
+        //batAudio.transform.position = flockCenter;
     }
 }
