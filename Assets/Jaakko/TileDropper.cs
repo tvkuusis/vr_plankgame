@@ -25,8 +25,11 @@ public class TileDropper : MonoBehaviour {
     int ctIndex;
     bool certainTilesDropped;
 
+    TowerController tc;
+
     void Start () {
         StartCoroutine(InitTiles());
+        tc = GameObject.Find("Tower").GetComponent<TowerController>();
     }
 
     IEnumerator InitTiles() {
@@ -128,12 +131,14 @@ public class TileDropper : MonoBehaviour {
         //    interval = startInterval;
         //    intervalDecreaseStep = interval;
         //    drop = true;
+        tc.ToggleFallColliders(true);
     }
 
     public void DropCertainTiles() {
         print("drop certain tiles");
         ctInterval = certainTimeWindow / certainTiles.Length;
         certainDrop = true;
+        tc.ToggleFallColliders(true);
     }
 
     void Update () {

@@ -24,6 +24,8 @@ public class ElevatorScript : MonoBehaviour {
     float movedDistance = 0;
     public bool activated;
 
+    public GameObject pillar;
+
 	void Start () {
 		audios = GetComponents<AudioSource> ();
 		moveSound = audios [0];
@@ -56,6 +58,7 @@ public class ElevatorScript : MonoBehaviour {
         if(transform.position == currentEnd.position) {
 			movedDistance = 0;
             activated = false;
+            pillar.SetActive(false);
 			moveSound.Stop ();
 			stopSound.Play ();
         }

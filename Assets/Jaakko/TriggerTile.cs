@@ -28,15 +28,17 @@ public class TriggerTile : MonoBehaviour {
 	void Update () {
 		if (playerInTrigger && !tileDropCalled) {
             t += Time.deltaTime;
-            Color newColor = Color.red * Mathf.LinearToGammaSpace(t / 2f);
+            Color newColor = Color.red * Mathf.LinearToGammaSpace(t / 10f);
             mat.SetColor("_EmissionColor", newColor);
 
             if (t >= timeToTrigger) {
                 td.DropTiles( transform.position );
                 tileDropCalled = true;
             }
+        }else if (tileDropCalled) {
+            mat.SetColor("_EmissionColor", origColor);
         }
-	}
+    }
 
     void Rumble(bool startStop) {
         if (startStop) {
