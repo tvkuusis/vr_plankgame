@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +20,21 @@ public class PressurePedestal : MonoBehaviour
 
     public GameObject correctItem;
     public GameObject fakeItem;
+    GameObject placedItem;
+    public Transform attachedPosition;
+
+
+    public GameObject bars;
+    BarsActivation ba;
+
+    bool placed;
+
+    Vector3 origSize;
+
+
+    void Start(){
+        ba = bars.GetComponent<BarsActivation>();
+    }
 
     void Update()
     {
@@ -45,26 +61,53 @@ public class PressurePedestal : MonoBehaviour
         PlaceItem(col.gameObject);
     }
 
+    private void OnTriggerExit(Collider col)
+    {
+        RemoveItem(col.gameObject);
+    }
+
     void PlaceItem(GameObject col){
-        if (col.gameObject == correctItem || col.gameObject == fakeItem) {
-            if (col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand) {
-                var hand = col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand;
-                hand.EndInteraction(col.gameObject.GetComponent<NewtonVR.NVRInteractable>());
+
+        if (!placed) {
+            origSize = col.transform.localScale;
+            col.transform.position = attachedPosition.position;
+            col.transform.rotation = attachedPosition.rotation;
+            col.transform.localScale = origSize;
+            col.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
+                if (col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand) {
+                    var hand = col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand;
+                    hand.EndInteraction(col.gameObject.GetComponent<NewtonVR.NVRInteractable>());
+                }
+
+            if (col.gameObject == correctItem || col.gameObject == fakeItem) { // Placed original or fake object
+                DeactivateTrap();
             }
-            ReturnToStart();
-        }
-        else {
-            StartFalling();
+            else { // Placed wrong object
+                ActivateTrap();
+            }
+            placed = true;
+            placedItem = col;
         }
     }
 
-
-    void ReturnToStart(){
-        // Do something
+    void RemoveItem(GameObject col){
+        if (placed) {
+            if (col == placedItem) { // Check if leaving object is the one on the pedestal, activate trap if it is
+                ActivateTrap();
+            }
+            placed = false;
+        }
     }
 
-    void StartFalling(){
+    void DeactivateTrap(){
         // Do something
+        ba.Deactivate();
+    }
+
+    void ActivateTrap(){
+        // Do something
+        ba.Activate();
     }
 
     //void Start

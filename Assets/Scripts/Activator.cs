@@ -24,9 +24,9 @@ public class Activator : MonoBehaviour {
     }
 	
 	void Update () {
-        if (Input.GetKeyDown(KeyCode.P)) {
-            PlaceItem(item);
-        }
+        //if (Input.GetKeyDown(KeyCode.P)) {
+        //    PlaceItem(item);
+        //}
 	}
 
     private void OnTriggerEnter(Collider col){
