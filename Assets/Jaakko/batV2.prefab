@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 54275456547385304}
   - component: {fileID: 135034152227163088}
   - component: {fileID: 114142561341305820}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: batV2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 4760669876991950}
   - component: {fileID: 33080099701594278}
   - component: {fileID: 23442064347427052}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 4244332768911346}
   - component: {fileID: 33673632509948298}
   - component: {fileID: 23336296792160838}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: wing_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 4586673499113156}
   - component: {fileID: 33137786471194944}
   - component: {fileID: 23870550208452628}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: wing_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -310,6 +310,9 @@ MonoBehaviour:
   rule3Weight: 0
   rule4Weight: 0
   rule5Weight: 0
+  rule6Weight: 0
+  otherBoids: []
+  closestBoid: {fileID: 0}
   animStarted: 0
   r: 0
 --- !u!135 &135034152227163088
@@ -322,5 +325,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 5.5
+  m_Radius: 6
   m_Center: {x: 0, y: 0, z: -3.14}

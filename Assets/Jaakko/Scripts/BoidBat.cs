@@ -28,10 +28,21 @@ public class BoidBat : MonoBehaviour {
     float distFromOtherBoids;
 
     public Transform[] otherBoids;
+    public Transform closestBoid;
+
+    float colliderDefaultRadius = 5.5f;
+    float colMin = 4;
+    float colMax = 20;
+    float colDir = 1;
+    SphereCollider col;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
         GetComponent<Animator>().SetTrigger("startAnimation");
+        //col = GetComponent<SphereCollider>();
+        //col.radius = Random.Range(colMin, colMax);
+        //int r = Random.Range(0, 2);
+        //colDir = r == 0 ? 1 : -1;
     }
 
     Vector3 Calc() {
@@ -43,15 +54,15 @@ public class BoidBat : MonoBehaviour {
         // Rule 2: Boids try to keep a small distance away from other boids.
 
         Vector3 batAvoidance = Vector3.zero;
-        Transform closestBoid = otherBoids[0];
-        for (int i = 0; i < otherBoids.Length; i++) {
-            if ((transform.position - otherBoids[i].position).magnitude < (transform.position - closestBoid.position).magnitude) {
-                closestBoid = otherBoids[i];
-            }
-        }
-        if ((transform.position - closestBoid.position).magnitude < distFromOtherBoids) {
-            batAvoidance = (closestBoid.position - transform.position) * -2;
-        }
+        //closestBoid = otherBoids[0];
+        //for (int i = 0; i < otherBoids.Length; i++) {
+        //    if ((transform.position - otherBoids[i].position).magnitude < (transform.position - closestBoid.position).magnitude) {
+        //        closestBoid = otherBoids[i];
+        //    }
+        //}
+        //if ((transform.position - closestBoid.position).magnitude < distFromOtherBoids) {
+        //    batAvoidance = (closestBoid.position - transform.position).normalized;
+        //}
 
         // Rule 3: Boids try to match velocity with near boids.
 
@@ -123,7 +134,16 @@ public class BoidBat : MonoBehaviour {
         speed = rb.velocity.magnitude;
 
         SetRotation();
+        //ChangeRadius();
     }
+
+    //void ChangeRadius() {
+    //    if (col.radius < colMin) colDir = 1;
+    //    if (col.radius > colMax) colDir = -1;
+
+    //    float rad = col.radius + Random.Range(0.1f, 0.5f) * colDir;
+    //    col.radius = rad;
+    //}
 
     void SetRotation() {
         Vector3 dir = rb.velocity.normalized;
