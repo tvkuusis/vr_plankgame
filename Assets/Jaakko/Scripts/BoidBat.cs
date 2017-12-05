@@ -25,6 +25,9 @@ public class BoidBat : MonoBehaviour {
     public float rule5Weight;
     public float rule6Weight;
     float randomness;
+    float distFromOtherBoids;
+
+    public Transform[] otherBoids;
 
     void Start() {
         rb = GetComponent<Rigidbody>();
@@ -40,6 +43,15 @@ public class BoidBat : MonoBehaviour {
         // Rule 2: Boids try to keep a small distance away from other boids.
 
         Vector3 batAvoidance = Vector3.zero;
+        Transform closestBoid = otherBoids[0];
+        for (int i = 0; i < otherBoids.Length; i++) {
+            if ((transform.position - otherBoids[i].position).magnitude < (transform.position - closestBoid.position).magnitude) {
+                closestBoid = otherBoids[i];
+            }
+        }
+        if ((transform.position - closestBoid.position).magnitude < distFromOtherBoids) {
+            batAvoidance = (closestBoid.position - transform.position) * -2;
+        }
 
         // Rule 3: Boids try to match velocity with near boids.
 
@@ -90,6 +102,7 @@ public class BoidBat : MonoBehaviour {
         rule4Weight = controller.toGoal;
         rule5Weight = controller.torchAvoid;
         rule6Weight = controller.playerAvoid;
+        distFromOtherBoids = controller.distFromOtherBoids;
     }
 
     void FixedUpdate() {
@@ -130,6 +143,20 @@ public class BoidBat : MonoBehaviour {
         rule5Weight = controller.torchAvoid;
         rule6Weight = controller.playerAvoid;
         torch = controller.torch;
+        distFromOtherBoids = controller.distFromOtherBoids;
+    }
+
+    public void SetOtherBoidsArray() {
+
+        List<Transform> boidsList = new List<Transform>() { };
+
+        for (int i = 0; i < controller.boids.Length; i++) {
+            boidsList.Add(controller.boids[i].transform);
+        }
+        boidsList.Remove(transform);
+
+        otherBoids = boidsList.ToArray();
+
         inited = true;
     }
 

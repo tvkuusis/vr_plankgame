@@ -28,6 +28,7 @@ public class BoidControl : MonoBehaviour {
     public float torchAvoid;
     public float playerAvoid;
     public float randomness = 1;
+    public float distFromOtherBoids = 0.1f;
 
     public bool setNewWeights;
     public bool newWeightsSet;
@@ -60,6 +61,11 @@ public class BoidControl : MonoBehaviour {
             boids[i] = boid;
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        for (int i = 0; i < boids.Length; i++) {
+            boids[i].GetComponent<BoidBat>().SetOtherBoidsArray();
+        }
+
         boidsCreated = true;
         newWeightsSet = true;
     }
