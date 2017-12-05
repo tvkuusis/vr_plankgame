@@ -144,7 +144,7 @@ MeshRenderer:
   m_GameObject: {fileID: 1504698375185120}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -178,7 +178,7 @@ MeshRenderer:
   m_GameObject: {fileID: 1340850207633706}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -212,7 +212,7 @@ MeshRenderer:
   m_GameObject: {fileID: 1775196085713566}
   m_Enabled: 1
   m_CastShadows: 1
-  m_ReceiveShadows: 1
+  m_ReceiveShadows: 0
   m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -303,7 +303,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentTarget: {fileID: 0}
+  torch: {fileID: 0}
   speed: 0
+  rule1Weight: 0
+  rule2Weight: 0
+  rule3Weight: 0
+  rule4Weight: 0
+  rule5Weight: 0
   animStarted: 0
   r: 0
 --- !u!135 &135034152227163088
