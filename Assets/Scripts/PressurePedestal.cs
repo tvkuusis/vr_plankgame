@@ -42,6 +42,10 @@ public class PressurePedestal : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
+        PlaceItem(col.gameObject);
+    }
+
+    void PlaceItem(GameObject col){
         if (col.gameObject == correctItem || col.gameObject == fakeItem) {
             if (col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand) {
                 var hand = col.GetComponent<NewtonVR.NVRInteractableItem>().AttachedHand;
@@ -49,10 +53,18 @@ public class PressurePedestal : MonoBehaviour
             }
             ReturnToStart();
         }
+        else {
+            StartFalling();
+        }
     }
 
-    void ReturnToStart(){
 
+    void ReturnToStart(){
+        // Do something
+    }
+
+    void StartFalling(){
+        // Do something
     }
 
     //void Start
