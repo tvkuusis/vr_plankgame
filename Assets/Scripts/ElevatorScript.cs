@@ -25,6 +25,7 @@ public class ElevatorScript : MonoBehaviour {
     public bool activated;
 
     public GameObject pillar;
+    public TargetController targetController;
 
 	void Start () {
 		audios = GetComponents<AudioSource> ();
@@ -40,7 +41,7 @@ public class ElevatorScript : MonoBehaviour {
 
 	void Update () {
         if (Input.GetKeyDown(KeyCode.E)) {
-            //ActivateElevator();
+            MoveToLevelEnd();
         }
 
         if (activated) {
@@ -61,6 +62,7 @@ public class ElevatorScript : MonoBehaviour {
             pillar.SetActive(false);
 			moveSound.Stop ();
 			stopSound.Play ();
+            targetController.StartBatsAndTarget();
         }
     }
 

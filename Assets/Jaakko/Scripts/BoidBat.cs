@@ -74,13 +74,16 @@ public class BoidBat : MonoBehaviour {
 
         // Rule 5: Boids especially try to avoid flames (players torch)
 
-        Vector3 specialAvoidance;
-
-        if (Vector3.Distance(transform.position, torch.position) < 0.5f) {
-            specialAvoidance = (transform.position - torch.position).normalized;
-        } else {
-            specialAvoidance = Vector3.zero;
+        Vector3 specialAvoidance = Vector3.zero;
+        if (torch != null) {
+            if (Vector3.Distance(transform.position, torch.position) < 0.5f) {
+                specialAvoidance = (transform.position - torch.position).normalized;
+            }
+            else {
+                specialAvoidance = Vector3.zero;
+            }
         }
+        
 
         // Rule 6: Boids try to avoid the player
 
@@ -162,7 +165,7 @@ public class BoidBat : MonoBehaviour {
         rule4Weight = controller.toGoal;
         rule5Weight = controller.torchAvoid;
         rule6Weight = controller.playerAvoid;
-        torch = controller.torch;
+        if (controller.torch != null) torch = controller.torch;
         distFromOtherBoids = controller.distFromOtherBoids;
     }
 

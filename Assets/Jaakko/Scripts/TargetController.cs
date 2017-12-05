@@ -17,20 +17,29 @@ public class TargetController : MonoBehaviour {
 
     bool skipOnce;
 
+    bool started;
+
 	void Start () {
         goAround = GetComponent<GoAround>();
 		if (waypoints.Length < 1) {
             Debug.LogError("Target's waypoints.Length = 0 :: " + this.name);
         } else {
-            StartCoroutine(TargetMove());
+            
             transform.position = bc.transform.position;
         }
 	}
 
+    public void StartBatsAndTarget()
+    {
+        if (started) return;
+        StartCoroutine(TargetMove());
+        started = true;
+    }
+
     IEnumerator TargetMove() {
 
         while (!bc.boidsCreated) yield return null;
-
+        bc.StartBats();
         Debug.Log("TargetMove() :: " + this.name);
 
         for (int i = 0; i < waypoints.Length; i++) {
