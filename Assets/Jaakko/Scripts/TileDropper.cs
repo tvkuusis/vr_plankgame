@@ -149,8 +149,8 @@ public class TileDropper : MonoBehaviour {
 
     void Update () {
 
-        if (Input.GetKeyDown(KeyCode.D)) DropTiles(transform.position);
-        if (Input.GetKeyDown(KeyCode.C)) DropCertainTiles();
+        //if (Input.GetKeyDown(KeyCode.D)) DropTiles(transform.position);
+        //if (Input.GetKeyDown(KeyCode.C)) DropCertainTiles();
 
         if (drop) {
             t += Time.deltaTime;

@@ -120,27 +120,33 @@ public class GameController : MonoBehaviour {
 		if (t > 0) {
 			t -= Time.deltaTime;
 		} else if (t <= 0 && !feetLoaded) {
-            if (leftFootParent.activeSelf && rightFootParent.activeSelf) {
+            if (GameObject.Find("Left tracker") != null || GameObject.Find("Right tracker") != null) {
                 LoadFeetPositions();
+            }
+            else {
+                print("Feet not found");
+                leftFootModel.SetActive(false);
+                rightFootModel.SetActive(false);
             }
             AlignRoomWithPlayer();
             feetLoaded = true;
         }
 
 		if (playerInSpawnRoom) {
-			//newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
-			//player.transform.position = newPosition;
-            //if (Input.GetKeyDown(KeyCode.M)) {
-            //    CalibrateFeetPositions();
-            //}else if (Input.GetKeyDown(KeyCode.L)) {
-            //    LoadFeetPositions();
-            //}
-			//if (fallSwitch.GetComponent<NVRSwitchModified> ().CurrentState == true) {
-			//	fallEnabled = true;
-			//} else {
-			//	fallEnabled = false;
-			//}
-		} else {
+            //newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
+            //player.transform.position = newPosition;
+            if (Input.GetKeyDown(KeyCode.M)) {
+                CalibrateFeetPositions();
+            }
+                //}else if (Input.GetKeyDown(KeyCode.L)) {
+                //    LoadFeetPositions();
+                //}
+                //if (fallSwitch.GetComponent<NVRSwitchModified> ().CurrentState == true) {
+                //	fallEnabled = true;
+                //} else {
+                //	fallEnabled = false;
+                //}
+            } else {
 			if (falling) {
 				velocity -= fallAcceleration * Time.deltaTime;
 				yDist += velocity * Time.deltaTime;
