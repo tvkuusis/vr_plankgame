@@ -22,7 +22,7 @@ public class ObjectSpawner : MonoBehaviour {
     }
 
     void OnTriggerExit(Collider col){
-        print("Something left collider");
+        //print("Something left collider");
         if(col.gameObject == spawned) {
             print("object left collider");
             Destroy(col.gameObject, destroyTimer);

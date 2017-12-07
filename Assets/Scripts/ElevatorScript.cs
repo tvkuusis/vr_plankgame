@@ -63,6 +63,7 @@ public class ElevatorScript : MonoBehaviour {
 			moveSound.Stop ();
 			stopSound.Play ();
             targetController.StartBatsAndTarget();
+            GameObject.Find("TileDropper").GetComponent<TileDropper>().DropCertainTiles();
         }
     }
 
