@@ -1,12 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TileDropper : MonoBehaviour {
 
     GameObject[] tiles;
     public TileScript[] tileScripts;
-
     bool drop;
     int index;
     float t;
@@ -26,6 +26,7 @@ public class TileDropper : MonoBehaviour {
     bool certainTilesDropped;
 
     TowerController tc;
+    public UnityEvent onTileFall;
 
     void Start () {
         StartCoroutine(InitTiles());
@@ -133,6 +134,8 @@ public class TileDropper : MonoBehaviour {
 
     public void DropTiles(Vector3 pos) {
         print("droptiles called");
+        onTileFall.Invoke();
+
         StartCoroutine(ReorderAndDrop(pos));
         //    interval = startInterval;
         //    intervalDecreaseStep = interval;
