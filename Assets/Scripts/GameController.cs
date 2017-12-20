@@ -99,8 +99,8 @@ public class GameController : MonoBehaviour {
         //es = elevator.GetComponent<ElevatorScript>();
         blinder = playerBlinder.GetComponent<Renderer>();
         blinderOrigColor = blinder.material.color;
-        ToggleFallAnimation();
-
+        //ToggleFallAnimation();
+        CheckFallToggle();
 		//if (playerInSpawnRoom) {
 		//	newPosition = new Vector3 (spawnroom.transform.position.x, spawnroom.transform.position.y, spawnroom.transform.position.z);
 		//	player.transform.position = newPosition;
@@ -359,7 +359,7 @@ public class GameController : MonoBehaviour {
             print("Feet switched");
         }
         else {
-            print("Feet not switched - are both feet trackers on and paired correctly?");
+            print("Feet not switched - are both feet trackers turned on and paired correctly?");
         }
         //GameObject.Find("Left foot").GetComponent<FootMover>().SwitchFoot();
         //GameObject.Find("Right foot").GetComponent<FootMover>().SwitchFoot();
@@ -409,15 +409,35 @@ public class GameController : MonoBehaviour {
 	}
 
     public void ToggleFallAnimation(){
-        print("Fall enabled: " + fallEnabled);
+        //print("Fall enabled: " + fallEnabled);
         if (fallEnabled) {
             fallEnabled = false;
             fallText.text = "Fall animation: off";
+            PlayerPrefs.SetInt("Fall", 0);
         }
         else {
             fallEnabled = true;
             fallText.text = "Fall animation: on";
+            PlayerPrefs.SetInt("Fall", 1);
         }
         print("Fall enabled: " + fallEnabled);
+    }
+
+    void CheckFallToggle(){
+        if(PlayerPrefs.GetInt("Fall") == 0) {
+            fallEnabled = false;
+            fallText.text = "Fall animation: off";
+            print("Fall anim loaded from memory, toggled off");
+        }else if(PlayerPrefs.GetInt("Fall") == 1) {
+            fallEnabled = true;
+            fallText.text = "Fall animation: on";
+            print("Fall anim loaded from memory, toggled on");
+        }
+        else {
+            PlayerPrefs.SetInt("Fall", 1);
+            fallEnabled = true;
+            fallText.text = "Fall animation: on";
+            print("No fall bool saved in memory, using default 'true'");
+        }
     }
 }

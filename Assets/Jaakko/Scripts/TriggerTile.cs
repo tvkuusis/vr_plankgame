@@ -30,7 +30,7 @@ public class TriggerTile : MonoBehaviour {
 	void Update () {
 		if (playerInTrigger && !tileDropCalled) {
             t += Time.deltaTime;
-            Color newColor = Color.red * Mathf.LinearToGammaSpace(t / 100f);
+            Color newColor = Color.red * Mathf.LinearToGammaSpace(t / 20f);
             mat.SetColor("_EmissionColor", newColor);
 
             if (t >= timeToTrigger) {
